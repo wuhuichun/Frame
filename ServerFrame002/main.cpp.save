@@ -1,0 +1,77 @@
+#include "TcpServer.h"
+#include "TcpClient.h"
+#include "Config.h"
+#include "Common.h"
+
+#include <stdio.h>
+#include <iostream>
+#include <thread>
+#include <fstream>
+
+
+using namespace std;
+
+
+
+void hello(TcpServer* _pSock)
+{
+	_pSock->ConnectLoop();
+}
+
+/*
+void world(TcpClient* _pSock)
+{
+	_pSock->RecvSendLoop();
+}
+*/
+int main()
+{
+//    cout << "Hello world!" << endl;
+    std::cout << BOLDGREEN << "hello world" << RESET << std::endl;
+
+Game Game1 = new Game
+
+
+
+
+/// 网络启动
+
+	// 服务器部分Test
+    string loginIp = Config::globalConfig_map["LoginServerIp"];
+    uint16_t loginPort = std::atoi( Config::globalConfig_map["LoginServerPort"].c_str() );
+
+	cout<< "[State]Server Socket ready. ip:"<< loginIp<< " port:"<< loginPort<< endl;
+
+    TcpServer mySock;
+    mySock.Init(loginIp, loginPort);
+
+	std::thread thread1(hello, &mySock);
+
+	thread1.join();
+
+	// 客户端部分Test
+//    string ip = Config::globalConfig_map["TestServerIp"];
+//    uint16_t port = (uint16_t)std::atoi( (Config::globalConfig_map["TestServerPort"]).c_str() );
+//
+//	cout<< Config::globalConfig_map["TestServerPort"]<< endl;
+//	cout<< "[State]Ready for connect Server. ip:"<< ip<< " port:"<< port<< endl;
+//
+//	TcpClient myClient;
+//	myClient.Init(ip, port);
+//	if(0 == myClient.Connect())
+//	{
+//		 std::thread thread2(world, &myClient);
+//
+//		 thread2.join();
+//	}
+//	else
+//	{
+//		cout<< "socket connect Error. maybe server not run."<< endl;
+//		return 0;
+//	}
+
+
+
+
+    return 0;
+}

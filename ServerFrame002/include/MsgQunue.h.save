@@ -1,0 +1,28 @@
+#ifndef _MSGQUNUE_H_
+#define _MSGQUNUE_H_
+
+#include "Msg.h"
+#include <queue>
+#include <iostream>
+
+using namespace std;
+
+
+class MsgQunue
+{
+	public:
+		MsgQunue();
+		~MsgQunue();
+
+	void PushMsg(char * _pbuf);
+
+	void PopMs
+
+
+	private:
+
+	std::queue<Msg> Msg_que;
+
+};
+
+#endif // _MSGQUNUE_H_

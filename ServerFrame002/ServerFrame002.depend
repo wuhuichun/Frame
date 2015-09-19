@@ -1,0 +1,109 @@
+# depslib dependency file v1.0
+1442072618 source:/home/whc/Pro/Test001/ServerFrame002/main.cpp
+	"TcpServer.h"
+	"TcpClient.h"
+	"Common.h"
+	"Game.h"
+	<stdio.h>
+	<iostream>
+	<thread>
+	<fstream>
+
+1413886220 source:/home/whc/Pro/Test001/ServerFrame002/src/SocketTcp.cpp
+	"SocketTcp.h"
+
+1413885489 /home/whc/Pro/Test001/ServerFrame002/include/SocketTcp.h
+	<unistd.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<sys/time.h>
+	<memory.h>
+	<thread>
+	<mutex>
+	<list>
+	<iostream>
+
+1442583419 /home/whc/Pro/Test001/ServerFrame002/include/TcpServer.h
+	<unistd.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<sys/time.h>
+	<memory.h>
+	<thread>
+	<mutex>
+	<list>
+	<iostream>
+	"Common.h"
+	"MsgQunue.h"
+
+1442583453 source:/home/whc/Pro/Test001/ServerFrame002/src/TcpServer.cpp
+	"TcpServer.h"
+
+1442069053 source:/home/whc/Pro/Test001/ServerFrame002/src/TcpClient.cpp
+	"TcpClient.h"
+
+1442069052 /home/whc/Pro/Test001/ServerFrame002/include/TcpClient.h
+	<unistd.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<sys/time.h>
+	<netdb.h>
+	<memory.h>
+	<thread>
+	<mutex>
+	<list>
+	<iostream>
+
+1442583998 source:/home/whc/Pro/Test001/ServerFrame002/src/MsgQunue.cpp
+	"MsgQunue.h"
+
+1442583647 /home/whc/Pro/Test001/ServerFrame002/include/MsgQunue.h
+	"Msg.h"
+	<queue>
+	<iostream>
+
+1442582772 source:/home/whc/Pro/Test001/ServerFrame002/src/Msg.cpp
+	"Msg.h"
+
+1442582372 /home/whc/Pro/Test001/ServerFrame002/include/Msg.h
+	<memory.h>
+	<string>
+
+1420108992 /home/whc/Pro/Test001/ServerFrame002/include/Common.h
+	<string.h>
+
+1420103717 source:/home/whc/Pro/Test001/ServerFrame002/src/Common.cpp
+	"Common.h"
+
+1442070894 source:/home/whc/Pro/Test001/ServerFrame002/src/Config.cpp
+	"Config.h"
+
+1442070873 /home/whc/Pro/Test001/ServerFrame002/include/Config.h
+	"Common.h"
+	<map>
+	<fstream>
+	<iostream>
+
+1442583336 /home/whc/Pro/Test001/ServerFrame002/include/Game.h
+	"TcpServer.h"
+	"TcpClient.h"
+	"Config.h"
+	"Common.h"
+	<iostream>
+	<thread>
+	<fstream>
+
+1442584181 source:/home/whc/Pro/Test001/ServerFrame002/src/Game.cpp
+	"Game.h"
+
+1442580085 source:/home/whc/Pro/Test001/ServerFrame002/src/Message.cpp
+	"Message.h"
+
+1442580084 /home/whc/Pro/Test001/ServerFrame002/include/Message.h
+

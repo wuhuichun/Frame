@@ -1,0 +1,44 @@
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
+
+#include "Common.h"
+
+#include <map>
+#include <fstream>
+#include <iostream>
+using namespace std;
+
+
+
+class Config
+{
+public:
+
+	static Config& GetInstance()
+	{
+		static Config Instance;
+
+		return Instance;
+	}
+
+	// 加载游戏全部全局配置
+	static int LoadGlobalConfig();
+
+
+
+
+private:
+	Config(){};
+	
+	virtual ~Config(){};
+
+	static Config Instance;
+
+	// 全局配置
+	static std::map<string, string> globalConfig_map;
+
+
+
+};
+
+#endif // _CONFIG_H_

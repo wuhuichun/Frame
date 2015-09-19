@@ -1,0 +1,29 @@
+#ifndef GAME_H
+
+#include "TcpServer.h"
+#include "TcpClient.h"
+#include "Config.h"
+#include "Common.h"
+
+#include <iostream>
+#include <thread>
+#include <fstream>
+
+#define GAME_H
+
+
+class Game
+{
+	public:
+		Game();
+		 ~Game();
+		
+		
+				void Init();
+	protected:
+	private:
+
+
+};
+
+#endif // GAME_H

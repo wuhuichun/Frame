@@ -1,0 +1,34 @@
+#include "MsgQunue.h"
+
+MsgQunue::MsgQunue()
+{
+	//ctor
+}
+
+MsgQunue::~MsgQunue()
+{
+	//dtor
+}
+
+void MsgQunue::PushMsg(char * _pbuf)
+{
+	std::cout<<"Good u got:MsgBuf"<< *_pbuf<< std::endl;
+	Msg MsgTemp;
+	MsgTemp.Decode(_pbuf);
+	this->Msg_que.push(MsgTemp);
+}
+
+Msg MsgQunue::PopMsg(){
+
+	if(this->Msg_que.count == 0){
+		return nullptr;
+	}
+
+	this->Msg_que.count
+	Msg MsgTemp = this->Msg_que.front();
+	this->Msg_que.pop();
+
+	return MsgTemp;
+}
+
+boo

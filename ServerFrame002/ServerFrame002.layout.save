@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="include/Msg.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="787" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/MsgQunue.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="186" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/Msg.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="100" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include/TcpClient.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="650" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="include/Config.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="389" topLine="6" />
+		</Cursor>
+		<Folding>
+			<Collapse line="17" />
+		</Folding>
+	</File>
+	<File name="src/TcpClient.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1312" topLine="60" />
+		</Cursor>
+	</File>
+	<File name="include/MsgQunue.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="244" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/Common.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="107" topLine="2" />
+		</Cursor>
+	</File>
+	<File name="include/Common.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="958" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/TcpServer.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5294" topLine="135" />
+		</Cursor>
+		<Folding>
+			<Collapse line="7" />
+			<Collapse line="16" />
+			<Collapse line="24" />
+			<Collapse line="34" />
+			<Collapse line="55" />
+			<Collapse line="66" />
+			<Collapse line="101" />
+			<Collapse line="148" />
+		</Folding>
+	</File>
+	<File name="src/Config.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1429" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="include/TcpServer.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="642" topLine="45" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="845" topLine="36" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>
