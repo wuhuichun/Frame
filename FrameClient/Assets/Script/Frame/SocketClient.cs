@@ -16,14 +16,16 @@ public class SocketClient{
 
     public void Init(string host, int port)
     {
-        //string m_host = "127.0.0.1";
-        //int port = 9527;
-
         // 创建
         m_Ip = IPAddress.Parse(host);
         m_Ipe = new IPEndPoint(m_Ip, port);
         m_sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
+    }
+
+    public bool IsConnect()
+    {
+        return m_sock.Connected;
     }
 
     public void Connect()
@@ -43,10 +45,8 @@ public class SocketClient{
         byte[] recvBytes = new byte[1024];
         int len;
 
-        //Debug.Log("Try Recv...");
         len = m_sock.Receive(recvBytes, recvBytes.Length, 0);
-
-
+        
         return recvBytes;        
     }
 
