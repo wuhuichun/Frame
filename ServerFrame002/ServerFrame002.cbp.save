@@ -37,6 +37,7 @@
 			<Add option="-Weverything" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Client.h" />
 		<Unit filename="include/Common.h" />
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/Game.h" />
@@ -45,6 +46,7 @@
 		<Unit filename="include/TcpClient.h" />
 		<Unit filename="include/TcpServer.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Client.cpp" />
 		<Unit filename="src/Common.cpp" />
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/Game.cpp" />

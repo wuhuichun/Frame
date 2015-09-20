@@ -73,10 +73,12 @@ void Game::Init()
 
 void Game::GameLoop(){
 	while(true){
+			cout<<"GameLoop()"<<endl;
+
 		if(!ServerSock.GetMsgQunue()->IsSendEmpty()){
 			Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
-			std::cout<<"Send msg, cmd:"
-			ServerSock.Send(ServerSock.GetMsgQunue()->sendFd, &msgTemp);
+			std::cout<<"Send Msg, cmd:"<< (int)msgTemp.m_cmd<< endl;
+			ServerSock.Send(msgTemp);  //ServerSock.GetMsgQunue()->sendFd,
 		}
 
 
@@ -85,28 +87,27 @@ void Game::GameLoop(){
 			Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
 
 			switch(msgTemp.m_cmd){
-			case eCmd::C2S_Test_Hello:{
+				case eCmd::C2S_Test_Hello:
+				{
+					Message Msg(MsgQunue::sendFd, eCmd::S2C_Test_Hello);
+					Msg.AddInt(6);
+					Msg.Send();
+				}
+				break;
 
-				Message Msg(eCmd::S2C_Test_Hello);
-				Msg.AddInt(6);
-				Msg.Send(MsgQunue::sendFd);
-}
-			break;
-
-			default:;
+				default:;
 
 			}
 		}
 
 
-
-
-		//Msg ha;
-
 	}
 
 }
 
-void Game::SendMsg2Client(int _fd, Message* _pMsg){
-	ServerSock.GetMsgQunue()->PushSendMsg(_fd, _pMsg);
+void Game::SendMsg2Client(const Message& _pMsg){
+	
+	
+	
+	ServerSock.GetMsgQunue()->PushSendMsg(_pMsg);
 }

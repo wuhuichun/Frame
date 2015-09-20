@@ -12,13 +12,10 @@ MsgQunue::~MsgQunue()
 	//dtor
 }
 
-void MsgQunue::PushRecvMsg(char * _pbuf)
+void MsgQunue::PushRecvMsg(const Message& _Msg)
 {
-	Message MsgTemp;
-	MsgTemp.Decode(_pbuf);
-
-	std::cout<<"Good u got:cmd: "<< (int)MsgTemp.m_cmd<< std::endl;
-	this->MsgRecv_que.push(MsgTemp);
+	std::cout<<"Good u got:cmd: "<< (int)_Msg.m_cmd<< std::endl;
+	this->MsgRecv_que.push(_Msg);
 }
 
 Message MsgQunue::PopRecvMsg(){
@@ -33,11 +30,9 @@ bool MsgQunue::IsRecvEmpty(){
 }
 
 
-void MsgQunue::PushSendMsg(int _fd, Message* pMsg)
+void MsgQunue::PushSendMsg(const Message& pMsg)
 {
-	sendFd = _fd;
-	this->MsgSend_que.push(*pMsg);
-
+	this->MsgSend_que.push(pMsg);
 }
 
 Message MsgQunue::PopSendMsg(){

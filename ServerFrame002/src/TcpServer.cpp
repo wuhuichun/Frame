@@ -10,14 +10,14 @@ TcpServer::TcpServer()
 	m_pBufRecv = new char[BUF_MAX_SIZE];  					// 接收缓冲区
 	m_pBufSend = new char[BUF_MAX_SIZE]; 					// 发送缓冲区
 
-	//OnRecvFunc = &MsgQunue::PushMsg;
+	m_Client_lst.clear();
 }
 
 TcpServer::~TcpServer()
 {
 	//dtor
-	delete [] m_pBufRecv;
-	delete [] m_pBufSend;
+	SAFE_DELETE_ARY(m_pBufRecv);
+	SAFE_DELETE_ARY(m_pBufSend);
 }
 
 // 创建套接字地址结构 失败返回-1, 成功返回 m_listenfd
@@ -111,11 +111,12 @@ void TcpServer::ConnectLoop()
 		struct timeval TimeOut = {0, 10}; 		// select 阻塞时间 1ms, 每次都需要赋值
 
 		// 将所有在链接的套接字加入select范围
-		for(auto& rIter : m_ConnectInfo_lst)
+		for(auto& rIter : m_Client_lst)
 		{
-			FD_SET(rIter.fd, &Fset);
-			if(rIter.fd > maxFd)
-				maxFd = rIter.fd;
+			FD_SET(rIter.m_fd, &Fset);
+
+			if(rIter.m_fd > maxFd)
+				maxFd = rIter.m_fd;
 		}
 
 		// select 检测读取 和 链接
@@ -127,7 +128,6 @@ void TcpServer::ConnectLoop()
 		else if (-1 == retSelect)
 		{
 			cout<< "TcpServer::ConnectLoop() error when select()"<< endl;
-
 			_exit(-1);
 		}
 
@@ -143,15 +143,14 @@ void TcpServer::ConnectLoop()
 	}
 }
 
-
 // 当select监听到有新链接的处理
 void TcpServer::OnNewConnect()
 {
 	cout<< "==> call  TcpServer::OnNewConnect() FD_SETSIZE= "<< FD_SETSIZE<<
-	". cur connect count:"<< m_ConnectInfo_lst.size()<< endl;
+	". cur connect count:"<< m_Client_lst.size()<< endl;
 
 	unsigned int limit = min(FD_SETSIZE, MAX_CONNECT);
-	if(m_ConnectInfo_lst.size() >= limit)
+	if(m_Client_lst.size() >= limit)
 	{
 		cout<< "sorry. at the max of sock connect's Count "<< FD_SETSIZE<< endl;
 		return;
@@ -172,12 +171,10 @@ void TcpServer::OnNewConnect()
 	}
 
 	// 保存新链接信息
-	ConInfo Conn; 										// 新的链接信息
-	Conn.fd = connFd;
-	memcpy(&Conn.Addr4, &ConnAddr, sizeof(ConnAddr)); 	// 复制地址结构
+	Client C(connFd);
 
 	MutexConnLst.lock();
-	m_ConnectInfo_lst.push_back(Conn);
+	m_Client_lst.push_back(C);
 	MutexConnLst.unlock();
 }
 
@@ -187,17 +184,16 @@ void TcpServer::OnNewConnect()
 void TcpServer::OnConnectRecvMsg(fd_set & _Fset)
 {
 	bool isCloseConn = false;
-	std::list<ConInfo>::iterator dleteIter = m_ConnectInfo_lst.begin();
-	std::list<ConInfo>::iterator iter = dleteIter;
-	for(; iter != m_ConnectInfo_lst.end(); iter++)
+	std::list<Client>::iterator dleteIter = m_Client_lst.begin();
+	std::list<Client>::iterator iter = dleteIter;
+	for(; iter != m_Client_lst.end(); iter++)
 	{
-		int connFd = iter->fd;
+		int connFd = iter->m_fd;
 
 		if(!FD_ISSET(connFd, &_Fset))
 			continue;
 
 		/// 找到有消息的链接了
-		//char m_pBufRecv[BUF_MAX_SIZE] = {0};
 		memset(&m_pBufRecv[0], 0, sizeof(m_pBufRecv)); 		// 接受缓冲区清空
 		size_t recvLen = 0;
 		recvLen = (size_t)recv(connFd, m_pBufRecv, BUF_MAX_SIZE, 0);
@@ -215,34 +211,28 @@ void TcpServer::OnConnectRecvMsg(fd_set & _Fset)
 			continue;
 		}
 
-		std::cout<< "==> u got msg:\t"<< m_pBufRecv<< "\tlen:"<< recvLen<< endl;
+		// std::cout<< "==> u got msg:\t"<< m_pBufRecv<< "\tlen:"<< recvLen<< endl;
 
 		// 解包处理
-		this->UnpackAndPushInQunue(recvLen);
-
-
-		 // YU_TODO: 临时处理
-		memset(&m_pBufSend[0], 0, sizeof(m_pBufSend)); 		// 接受缓冲区清空
-		memcpy(&m_pBufSend[0], m_pBufRecv, recvLen);
-		m_pBufSend[recvLen] = '\0';
-
-		send(connFd, m_pBufSend, recvLen, 0);
+		this->UnpackAndPushInQunue(connFd, recvLen);
 	}
 
 	if(isCloseConn)
 	{
-		m_ConnectInfo_lst.erase(dleteIter);
+		MutexConnLst.lock();  // YU_TODO: DELETE if in the same thread
+		m_Client_lst.erase(dleteIter);
+		MutexConnLst.unlock();
 	}
 }
 
-void TcpServer::Send(int _fd, Message* _pMsg){
+void TcpServer::Send(Message* _pMsg){
 		 // YU_TODO: 临时处理
 
 		int sendLen = _pMsg->m_len + 4;
 		memset(&m_pBufSend[0], 0, sizeof(m_pBufSend)); 		// 接受缓冲区清空
 		memcpy(&m_pBufSend[0], _pMsg->GetBuf(), sendLen);
 
-		send(_fd, m_pBufSend, sendLen, 0);
+		send(_pMsg->m_fd, m_pBufSend, sendLen, 0);
 }
 
 // 关闭监听套接字
@@ -276,7 +266,7 @@ MsgQunue* TcpServer::GetMsgQunue(){
 
 
 
-void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
+void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 {
 	/* 包描述 cmd + 内容 才是真真的消息
 	-------------------------------------------------------------
@@ -333,8 +323,11 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 		{
 			pos += packetEndLen;
 			std::cout<< "a good msg package. len ="<< len<< endl;
-			// YU_TODO： 	CallBack
-			m_MsgQunue->PushRecvMsg((msgBuf));
+
+			Message Msg(_fd);
+			Msg.Decode(msgBuf);
+
+			m_MsgQunue->PushRecvMsg(Msg);
 		}
 		else
 		{

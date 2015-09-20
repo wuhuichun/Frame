@@ -35,6 +35,10 @@ protected:
 private:
 };
 
+//
+#define SAFE_DELETE(p) { if((p) != nullptr){ delete (p); (p) = nullptr;} }
+
+#define SAFE_DELETE_ARY(p) { if((p) != nullptr){ delete [] (p); (p) = nullptr;} }
 
 // 检查某一行文本数据是否是空行 ch:每条数据第一个字符
 #define IS_EMPTY_LINE(ch) ((ch == '\n') || (ch == '\r\n') || (ch == 0))

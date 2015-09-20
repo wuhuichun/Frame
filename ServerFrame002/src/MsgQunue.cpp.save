@@ -12,12 +12,12 @@ MsgQunue::~MsgQunue()
 	//dtor
 }
 
-void MsgQunue::PushRecvMsg(char * _pbuf)
+void MsgQunue::PushRecvMsg(Message Msg)
 {
-
 	Message MsgTemp;
 	MsgTemp.Decode(_pbuf);
-		std::cout<<"Good u got:MsgBuf"<< MsgTemp<< std::endl;
+
+	std::cout<<"Good u got:cmd: "<< (int)MsgTemp.m_cmd<< std::endl;
 	this->MsgRecv_que.push(MsgTemp);
 }
 

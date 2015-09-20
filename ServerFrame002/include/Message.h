@@ -64,21 +64,20 @@ class Message
 {
 private:
 
-	// 将mp_buf 序列化
-	void Encode();
+
 
 
 public:
-	Message();
-	Message(eCmd _cmd);
+	Message(int _fd);
+	Message(int _fd, eCmd _cmd);
 	Message(const Message & _Msg);
 	~Message();
 
-	// 将消息发送出去, 需要和 AppendBuf() 配合使用
-	void Send(int fd);
-
 	// 将mp_buf 反序列化
 	void Decode(char * _buf);
+
+	// 将mp_buf 序列化
+	void Encode();
 
 
 	//
@@ -115,14 +114,18 @@ public:
 
 public:
 
+	int m_fd;
 	size_t m_len;
-		eCmd m_cmd; 			// 消息ID
+	eCmd m_cmd; 			// 消息ID
+
+
 	private:
 
 
 	char * mp_content; 			// 消息内容缓冲区指针
 
 	int m_pos;
+
 
 
 };

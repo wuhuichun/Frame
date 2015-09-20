@@ -25,6 +25,7 @@ memo:
 
 #include "Common.h"
 #include "MsgQunue.h"
+#include "Client.h"
 
 #define MAX_CONNECT 1000 						// 客户端最大链接数
 #ifndef BUF_MAX_SIZE
@@ -33,17 +34,18 @@ memo:
 
 typedef struct sockaddr_in SockAddr4; 			// IP4 套接字地址结构
 
+/*
 // 链接信息结构体
 typedef struct _ConInfo{
 	int fd;										// 套接字fd
 	SockAddr4 Addr4; 							// 套接字地址结构
 }ConInfo;
-
+*/
 
 
 class TcpServer
 {
-// 外部方法
+// 外部
 public:
 	TcpServer();
 	~TcpServer();
@@ -68,9 +70,9 @@ public:
 	MsgQunue* GetMsgQunue();
 
 	//
-	void Send(int _fd, Message* _Msg);
+	void Send(Message* _Msg);
 
-// 私有成员变量
+// 私有成员
 private:
 	uint16_t 	m_port; 						// 端口号
 	int 		m_listenfd; 					// 监听套接字ID
@@ -79,14 +81,10 @@ private:
 	char * 		m_pBufRecv;  					// 接收缓冲区
 	char * 		m_pBufSend; 					// 发送缓冲区
 
-
-	std::list<ConInfo> m_ConnectInfo_lst; 		// 所有客户端链接信息
 	//SockCallBack OnRecvFunc; 					// 接受到消息的回调函数
+	std::list<Client> m_Client_lst; 			// 所有客户端链接信息
 
     MsgQunue* m_MsgQunue;
-
-// 内部方法
-private:
 
 	// 创建套接字地址结构
 	int Create();
@@ -104,8 +102,7 @@ private:
 	void OnConnectRecvMsg(fd_set & _Fset);
 
 	// 将缓冲区数据解包并加入消息队列
-	void UnpackAndPushInQunue(size_t _recvLen);
-
+	void UnpackAndPushInQunue(int fd, size_t _recvLen);
 
 
 };

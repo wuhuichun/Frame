@@ -23,8 +23,6 @@ public:
 
 	~Game();
 
-
-
 public:
 	static Game& GetInstance()
 	{
@@ -42,7 +40,7 @@ public:
 
 	void GameLoop();
 
-	void SendMsg2Client(int _fd, Message* _pMsg);
+	void SendMsg2Client(Message* _pMsg);
 
 protected:
 

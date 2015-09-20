@@ -3,19 +3,25 @@
 
 using namespace std;
 
-Message::Message()
+// ctor recv message
+Message::Message(int _fd)
 {
+
 	//ctor
+	m_fd = _fd;
 	m_pos = 0;
 
 
 }
 
-Message::Message(eCmd _cmd)
+// ctor send message
+Message::Message(int _fd, eCmd _cmd)
 {
 	//ctor
-	this->m_cmd = _cmd;
+	m_fd = _fd;
 	m_pos = 0;
+	this->m_cmd = _cmd;
+
 	mp_content = new char[MSG_LEN_MAX];
 	memset(mp_content, 0, MSG_LEN_MAX);
 
@@ -32,6 +38,7 @@ Message::Message(eCmd _cmd)
 
 Message::Message(const Message & _Msg)
 {
+	m_fd = _Msg.m_fd;
 	m_len = _Msg.m_len;
 	m_cmd = _Msg.m_cmd;
 
@@ -46,11 +53,7 @@ Message::Message(const Message & _Msg)
 Message::~Message()
 {
 	//dtor
-	if(mp_content != nullptr)
-	{
-		delete [] mp_content;
-	}
-
+	SAFE_DELETE_ARY(mp_content);
 }
 
 void Message::Encode(){
@@ -99,20 +102,23 @@ void Message::Decode(char* _pbuf){
 
 }
 
-
-void Message::Send(int _fd){
+void Message::Send(){
 	this->Encode();
 
 	// YU_TODO: msg router. to server or to client
-	if(((int)m_cmd > MSG_S2C_BEGIN)
-		&& ((int)m_cmd < 60000))
+	int cmd = (int)m_cmd;
+	if(( MSG_S2C_BEGIN< cmd ) && (cmd < 60000))
 	{
 		cout<<"Sill SendMsg, cmd: " << (int)m_cmd<<endl;
-		Game::GetInstance().SendMsg2Client(_fd, this);
+
+		Game.GetInstance().SendMsg2Client(*this);
 	}
-
-
+	else{
+		cout<< "Error at Msg.Send(), sorry, I don't know which shall I send to."<< endl;
+	}
 }
+
+
 
 char * Message::GetBuf(){
 	return mp_content;
@@ -167,8 +173,6 @@ void  Message::AddString(std::string _value)
 	m_pos += lenLen;
 
 	int16_t strLen = len.s;//_value.length();
-
-
 	memcpy(&(mp_content[m_pos]), &_value, strLen);
 	m_pos += strLen;
 }
@@ -216,7 +220,10 @@ int Message::GetInt()
 void  Message::AddInt(int _value)
 {
 	const int len = 4;
-	memcpy(&(mp_content[m_pos]), &_value, len);
+	ai value;
+	value.i = _value;
+
+	memcpy(&(mp_content[m_pos]), value.a, len);
 	m_pos += len;
 }
 

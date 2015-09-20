@@ -16,7 +16,7 @@ public:
 	static int sendFd;
 
 	// 入队
-	void PushRecvMsg(char * _pbuf);
+	void PushRecvMsg(const Message& _pbuf);
 
 	// 出队
 	Message PopRecvMsg();
@@ -25,7 +25,7 @@ public:
 	bool IsRecvEmpty();
 
 		// 入队
-	void PushSendMsg(int _fd, Message* pMsg);
+	void PushSendMsg(const Message& pMsg);
 
 	// 出队
 	Message PopSendMsg();
