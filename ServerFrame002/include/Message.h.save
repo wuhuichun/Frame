@@ -66,8 +66,8 @@ private:
 
 	// 将mp_buf 序列化
 	void Encode();
-	
-	
+
+
 public:
 	Message();
 	Message(eCmd _cmd);
@@ -81,8 +81,8 @@ public:
 	void Decode(char * _buf);
 
 
-	// 
-	char * Message::GetBuf()
+	//
+	char * GetBuf();
 
 	///
 	//
@@ -116,14 +116,28 @@ public:
 public:
 
 	size_t m_len;
+		eCmd m_cmd; 			// 消息ID
 	private:
 
-	eCmd m_cmd; 			// 消息ID
+
 	char * mp_content; 			// 消息内容缓冲区指针
 
 	int m_pos;
 
 
 };
+
+union alen{
+	char a[4] = {0};
+	int i;
+};
+
+union astrLen{
+	char a[2] = {0};
+	int i;
+};
+
+
+
 
 #endif // MSG_H

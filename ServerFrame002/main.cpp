@@ -22,5 +22,8 @@ int main()
 
 	Game1.Init();
 
+	cout<< "Start GameLoop()"<< endl;
+	Game1.GameLoop();
+
     return 0;
 }

@@ -73,9 +73,11 @@ void Game::Init()
 
 void Game::GameLoop(){
 	while(true){
+			cout<<"GameLoop()"<<endl;
+
 		if(!ServerSock.GetMsgQunue()->IsSendEmpty()){
 			Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
-
+			std::cout<<"Send Msg, cmd:"<< (int)msgTemp.m_cmd<< endl;
 			ServerSock.Send(ServerSock.GetMsgQunue()->sendFd, &msgTemp);
 		}
 
@@ -92,10 +94,7 @@ void Game::GameLoop(){
 				Msg.Send(MsgQunue::sendFd);
 }
 			break;
-/*
-			case eCmd::C2S_System_001:
-			break;
-*/
+
 			default:;
 
 			}

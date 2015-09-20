@@ -14,9 +14,10 @@ MsgQunue::~MsgQunue()
 
 void MsgQunue::PushRecvMsg(char * _pbuf)
 {
-	std::cout<<"Good u got:MsgBuf"<< *_pbuf<< std::endl;
 	Message MsgTemp;
 	MsgTemp.Decode(_pbuf);
+
+	std::cout<<"Good u got:cmd: "<< (int)MsgTemp.m_cmd<< std::endl;
 	this->MsgRecv_que.push(MsgTemp);
 }
 

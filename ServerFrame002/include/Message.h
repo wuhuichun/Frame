@@ -127,4 +127,36 @@ public:
 
 };
 
+union alen{
+	char a[4] = {0};
+	int i;
+};
+
+union astrLen{
+	char a[2] = {0};
+	short s;
+};
+
+union ai{
+	char a[4] = {0};
+	int i;
+};
+
+union af{
+	char a[4] = {0};
+	float f;
+};
+
+union ad{
+	char a[8] = {0};
+	double d;
+};
+
+union as{
+	char a[8] = {0};
+	short s;
+};
+
+
+
 #endif // MSG_H

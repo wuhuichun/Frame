@@ -181,6 +181,8 @@ void TcpServer::OnNewConnect()
 	MutexConnLst.unlock();
 }
 
+
+
 // 当select监听到有链接收到消息
 void TcpServer::OnConnectRecvMsg(fd_set & _Fset)
 {
@@ -233,13 +235,14 @@ void TcpServer::OnConnectRecvMsg(fd_set & _Fset)
 	}
 }
 
-void TcpServer::Send(int _fd, Message& _Msg){
+void TcpServer::Send(int _fd, Message* _pMsg){
 		 // YU_TODO: 临时处理
-		memset(&m_pBufSend[0], 0, sizeof(m_pBufSend)); 		// 接受缓冲区清空
-		memcpy(&m_pBufSend[0], _Msg.GetBuf(), _Msg.;
-		m_pBufSend[recvLen] = '\0';
 
-		send(_fd, m_pBufSend, recvLen, 0);
+		int sendLen = _pMsg->m_len + 4;
+		memset(&m_pBufSend[0], 0, sizeof(m_pBufSend)); 		// 接受缓冲区清空
+		memcpy(&m_pBufSend[0], _pMsg->GetBuf(), sendLen);
+
+		send(_fd, m_pBufSend, sendLen, 0);
 }
 
 // 关闭监听套接字
@@ -271,29 +274,35 @@ MsgQunue* TcpServer::GetMsgQunue(){
 	return this->m_MsgQunue;
 }
 
+
+union alen{
+	char a[4] = {0};
+	int i;
+};
+
 void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 {
 	/* 包描述 cmd + 内容 才是真真的消息
 	-------------------------------------------------------------
 	| 0x02 0x02 | len | cmd | ********内容********** | 0x03 0X03 |
 	-------------------------------------------------------------
-		  2B       2B    4B          len-4B              2B
+		  2B       4B    4B          len-8B              2B
 
 	测试数据：02 02 31 30 30 32 30 32 48 65 6C 6C 6F 20 03 03 0D
 	*/
 
 	const size_t packetBeginLen = 2;
 	const size_t packetEndLen = 2;
-	const size_t lenLen = 2;
+	const size_t lenLen = 4;
 
 	const size_t contentLenLimit = 2000;
 
-	const char packetBegin 	= 0x02; 		// 双左斜杠表示包开始
-	const char packetEnd 		= 0x03; 		// 双右斜杠表示包结束
+	const char packetBegin 	= '\2'; 		// 双左斜杠表示包开始
+	const char packetEnd 		= '\3'; 		// 双右斜杠表示包结束
 	size_t pos 	= 0;
 
 
-	while(pos+6 < _recvLen) 				//	//判断 包是否已经读完
+	while(pos+4 < _recvLen) 				//	//判断 包是否已经读完
 	{
 		// 判断包头
 		if((m_pBufRecv[pos] != packetBegin) || (m_pBufRecv[pos+1] != packetBegin)) 		// 开始符 2B
@@ -305,8 +314,12 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 		pos += packetBeginLen;
 
 		char lenBuf[lenLen] = {0}; 									// 包len 2B
+		alen lensss;
 		memcpy(lenBuf, &m_pBufRecv[pos], lenLen);
-		size_t len = (size_t)atoi(lenBuf);
+
+		memcpy(lensss.a, &m_pBufRecv[pos], lenLen);
+		int lennnn = lensss.i;
+		size_t len = _recvLen -packetBeginLen - packetEndLen;//(size_t)atoi(lenBuf);
 
 		// 如果一个包长度大于contentLenLimit 就被认为是坏包被抛弃掉
 		if(len > contentLenLimit)
@@ -317,7 +330,7 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 
 		char msgBuf[contentLenLimit] = {0};
 		memcpy(msgBuf, &m_pBufRecv[pos], len);
-		pos += lenLen + len;
+		pos += len;
 
 		// 判断包尾
 		if((m_pBufRecv[pos] == packetEnd) && (m_pBufRecv[pos+1] == packetEnd))
@@ -325,7 +338,7 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 			pos += packetEndLen;
 			std::cout<< "a good msg package. len ="<< len<< endl;
 			// YU_TODO： 	CallBack
-			m_MsgQunue->PushMsg((msgBuf));
+			m_MsgQunue->PushRecvMsg((msgBuf));
 		}
 		else
 		{

@@ -81,15 +81,17 @@ void Message::Decode(char* _pbuf){
 	m_pos = 0;
 
 	// len
-	memcpy(lenBuf, &(_pbuf[pos]), lenLen);
+	alen len;
+	memcpy(len.a, &(_pbuf[pos]), lenLen);
 	pos += lenLen;
-	m_len = atoi(lenBuf);
+	m_len = len.i; 		//	atoi(lenBuf);
 
 	// cmd
-	memcpy(cmdBuf, &(_pbuf[pos]), cmdLen);
+	ai cmd;
+	memcpy(cmd.a, &(_pbuf[pos]), cmdLen);
 	pos += cmdLen;
 	m_pos = pos;
-	m_cmd = (eCmd)atoi(cmdBuf);
+	m_cmd = (eCmd)cmd.i; // (eCmd)atoi(cmdBuf);
 
 	// content
 	mp_content = new char[m_len];
@@ -116,6 +118,8 @@ char * Message::GetBuf(){
 	return mp_content;
 }
 
+
+
 //
 char Message::GetChar()
 {
@@ -137,11 +141,12 @@ void  Message::AddChar(char _value)
 std::string Message::GetString()
 {
 	char lenBUf[2] = {0};
+	astrLen len;
 
-	memcpy(lenBUf, &(mp_content[m_pos]), 2);
+	memcpy(len.a, &(mp_content[m_pos]), 2);
 	m_pos += 2;
 
-	int strLen = atoi(lenBUf);
+	int strLen = len.s;//atoi(lenBUf);
 	char strBuf[640] = {0};
 
 	memcpy(strBuf, &(mp_content[m_pos]), strLen);
@@ -154,12 +159,14 @@ std::string Message::GetString()
 
 void  Message::AddString(std::string _value)
 {
-	int16_t strLen = _value.length();
+
+	astrLen len;
+	len.s = _value.length();
 	const int lenLen = 2;
-	memcpy(&(mp_content[m_pos]), &strLen, lenLen);
+	memcpy(&(mp_content[m_pos]), len.a, lenLen);
 	m_pos += lenLen;
 
-
+	int16_t strLen = len.s;//_value.length();
 	memcpy(&(mp_content[m_pos]), &_value, strLen);
 	m_pos += strLen;
 }
@@ -167,21 +174,25 @@ void  Message::AddString(std::string _value)
 //
 short Message::GetShort()
 {
+	as ret;
 	const int len = 2;
 	char retBUf[len] = {0};
 
-	memcpy(retBUf, &(mp_content[m_pos]), len);
+	memcpy(ret.a, &(mp_content[m_pos]), len);
 	m_pos += len;
 
-	short ret = atoi(retBUf);
-	return ret;
+	short retValue = ret.s;//atoi(retBUf);
+	return retValue;
 
 }
 
 void  Message::AddShort(short _value)
 {
 	const int len = 2;
-	memcpy(&(mp_content[m_pos]), &_value, len);
+	as value;
+	value.s = _value;
+
+	memcpy(&(mp_content[m_pos]), value.a, len);
 	m_pos += len;
 }
 
@@ -190,19 +201,23 @@ int Message::GetInt()
 {
 	const int len = 4;
 	char retBUf[len] = {0};
+	ai ret;
 
-	memcpy(retBUf, &(mp_content[m_pos]), len);
+	memcpy(ret.a, &(mp_content[m_pos]), len);
 	m_pos += len;
 
-	int ret = atoi(retBUf);
-	return ret;
+	int retValue = ret.i; // atoi(retBUf);
+	return retValue;
 
 }
 
 void  Message::AddInt(int _value)
 {
 	const int len = 4;
-	memcpy(&(mp_content[m_pos]), &_value, len);
+	ai value;
+	value.i = _value;
+
+	memcpy(&(mp_content[m_pos]), value.a, len);
 	m_pos += len;
 }
 

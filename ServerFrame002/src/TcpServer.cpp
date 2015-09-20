@@ -181,6 +181,8 @@ void TcpServer::OnNewConnect()
 	MutexConnLst.unlock();
 }
 
+
+
 // 当select监听到有链接收到消息
 void TcpServer::OnConnectRecvMsg(fd_set & _Fset)
 {
@@ -272,6 +274,8 @@ MsgQunue* TcpServer::GetMsgQunue(){
 	return this->m_MsgQunue;
 }
 
+
+
 void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 {
 	/* 包描述 cmd + 内容 才是真真的消息
@@ -306,8 +310,12 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 		pos += packetBeginLen;
 
 		char lenBuf[lenLen] = {0}; 									// 包len 2B
+		alen lensss;
 		memcpy(lenBuf, &m_pBufRecv[pos], lenLen);
-		size_t len = (size_t)atoi(lenBuf);
+
+		memcpy(lensss.a, &m_pBufRecv[pos], lenLen);
+		int lennnn = lensss.i;
+		size_t len = _recvLen -packetBeginLen - packetEndLen; 		//(size_t)atoi(lenBuf);
 
 		// 如果一个包长度大于contentLenLimit 就被认为是坏包被抛弃掉
 		if(len > contentLenLimit)
