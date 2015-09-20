@@ -5,18 +5,19 @@ using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Net{
+public class Net
+{
 
     private SocketClient m_Server = new SocketClient();         // 服务器
 
     private MsgRouter m_MsgRouter = new MsgRouter();            // 消息路由
 
-    
+
     private SocketClient GetServer()
     {
         return m_Server;
     }
-   
+
     private MsgRouter GetMsgRouter()
     {
         return m_MsgRouter;
@@ -46,7 +47,7 @@ public class Net{
         while (MsgQunue.Instance.IsSendQueEmpty())
         {
             Message Msg = MsgQunue.Instance.PopSendMsg();
-            byte[] sendBuf = Encoding.ASCII.GetBytes(Msg.content);
+            byte[] sendBuf = Msg.Package();
             this.GetServer().Send(sendBuf);
         }
 
@@ -57,10 +58,12 @@ public class Net{
         while (this.GetServer().IsConnect())
         {
             Byte[] recvBuf = this.GetServer().Recv();
-            string recvStr = Encoding.ASCII.GetString(recvBuf);
+
             Message Msg = new Message();
-            Msg.content = recvStr;
-            MsgQunue.Instance.AddRecvMsg(Msg);
+            if (Msg.UnPackage(recvBuf))
+            {
+                MsgQunue.Instance.AddRecvMsg(Msg);
+            }
         }
     }
 
