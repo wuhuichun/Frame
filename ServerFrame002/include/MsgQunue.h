@@ -1,7 +1,7 @@
 #ifndef _MSGQUNUE_H_
 #define _MSGQUNUE_H_
 
-#include "Msg.h"
+#include "Message.h"
 #include <queue>
 #include <iostream>
 
@@ -15,16 +15,27 @@ public:
 	~MsgQunue();
 
 	// 入队
-	void PushMsg(char * _pbuf);
+	void PushRecvMsg(char * _pbuf);
 
 	// 出队
-	Msg PopMsg();
+	Message PopRecvMsg();
 
-	bool IsEmpty();
+
+	bool IsRecvEmpty();
+
+		// 入队
+	void PushSendMsg(Message * _pbuf);
+
+	// 出队
+	Message PopSendMsg();
+
+
+	bool IsSendEmpty();
 
 private:
 
-	std::queue<Msg> Msg_que;
+	std::queue<Message> MsgRecv_que;
+	std::queue<Message> MsgSend_que;
 
 };
 

@@ -73,14 +73,21 @@ void Game::Init()
 
 void Game::GameLoop(){
 	while(true){
-		if (ServerSock.GetMsgQunue()->IsEmpty()){
+		if (ServerSock.GetMsgQunue()->IsRecvEmpty()){
 			continue;
 		}
 
-        Msg msgTemp = ServerSock.GetMsgQunue()->PopMsg();
+        Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
 
         int recvInt = msgTemp.GetInt();
 		cout<< "U recv: "<< recvInt<< endl;
+
+		//Msg ha;
+
 	}
 
+}
+
+void Game::SendMsg2Client(int _fd, Message* _pMsg){
+	ServerSock.Send(_fd, _pMsg);
 }

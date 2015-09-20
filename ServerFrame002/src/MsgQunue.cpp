@@ -10,32 +10,43 @@ MsgQunue::~MsgQunue()
 	//dtor
 }
 
-void MsgQunue::PushMsg(char * _pbuf)
+void MsgQunue::PushRecvMsg(char * _pbuf)
 {
 	std::cout<<"Good u got:MsgBuf"<< *_pbuf<< std::endl;
-	Msg MsgTemp;
+	Message MsgTemp;
 	MsgTemp.Decode(_pbuf);
-	this->Msg_que.push(MsgTemp);
+	this->MsgRecv_que.push(MsgTemp);
 }
 
-Msg MsgQunue::PopMsg(){
-
-//	if(this->Msg_que.count == 0){
-//		return nullptr;
-//	}
-
-//	this->Msg_que.count
-	Msg MsgTemp = this->Msg_que.front();
-	this->Msg_que.pop();
+Message MsgQunue::PopRecvMsg(){
+	Message MsgTemp = this->MsgRecv_que.front();
+	this->MsgRecv_que.pop();
 
 	return MsgTemp;
 }
 
-bool MsgQunue::IsEmpty(){
-//
-//	if(Msg_que.Msg_que.size == 0 == 0){
-//		return true;
-//	}
+bool MsgQunue::IsRecvEmpty(){
+	return MsgRecv_que.empty();
+}
 
-	return Msg_que.empty();
+
+void MsgQunue::PushSendMsg(Message* pMsg)
+{
+	/*
+	std::cout<<"Good u got:MsgBuf"<< *_pbuf<< std::endl;
+	Message MsgTemp;
+	MsgTemp.Decode(_pbuf);
+	this->MsgSend_que.push(MsgTemp);
+	*/
+}
+
+Message MsgQunue::PopSendMsg(){
+	Message MsgTemp = this->MsgSend_que.front();
+	this->MsgSend_que.pop();
+
+	return MsgTemp;
+}
+
+bool MsgQunue::IsSendEmpty(){
+	return MsgSend_que.empty();
 }

@@ -67,6 +67,9 @@ public:
 
 	MsgQunue* GetMsgQunue();
 
+	//
+	void Send(int _fd, Message* _Msg);
+
 // 私有成员变量
 private:
 	uint16_t 	m_port; 						// 端口号

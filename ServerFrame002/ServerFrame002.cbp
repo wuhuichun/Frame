@@ -28,7 +28,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-std=c++11" />
-					<Add option="-gline-tables-only" />
+					<Add option="-g" />
 					<Add directory="include" />
 				</Compiler>
 			</Target>
@@ -41,7 +41,6 @@
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/Message.h" />
-		<Unit filename="include/Msg.h" />
 		<Unit filename="include/MsgQunue.h" />
 		<Unit filename="include/TcpClient.h" />
 		<Unit filename="include/TcpServer.h" />
@@ -50,7 +49,6 @@
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/Message.cpp" />
-		<Unit filename="src/Msg.cpp" />
 		<Unit filename="src/MsgQunue.cpp" />
 		<Unit filename="src/TcpClient.cpp" />
 		<Unit filename="src/TcpServer.cpp" />

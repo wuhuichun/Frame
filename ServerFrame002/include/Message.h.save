@@ -66,8 +66,8 @@ private:
 
 	// 将mp_buf 序列化
 	void Encode();
-
-
+	
+	
 public:
 	Message();
 	Message(eCmd _cmd);
@@ -81,8 +81,8 @@ public:
 	void Decode(char * _buf);
 
 
-	//
-	char * GetBuf();
+	// 
+	char * Message::GetBuf()
 
 	///
 	//

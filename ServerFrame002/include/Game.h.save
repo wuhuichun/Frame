@@ -14,14 +14,37 @@
 
 class Game
 {
-	public:
+private:
 		Game();
-		 ~Game();
-		
-		
-				void Init();
-	protected:
-	private:
+    TcpServer ServerSock;
+    static Game* mp_Instance;
+
+public:
+
+	~Game();
+
+
+
+public:
+	static Game& GetInstance()
+	{
+		/*
+		if(mp_Instance == nullptr)
+		{
+			mp_Instance = new Game();
+		}
+*/
+		As
+		return mp_Instance;
+	}
+
+	void Init();
+
+	void GameLoop();
+
+	void SendMsg2Client(int _fd, Message* _pMsg);
+
+protected:
 
 
 };

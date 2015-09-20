@@ -233,6 +233,16 @@ void TcpServer::OnConnectRecvMsg(fd_set & _Fset)
 	}
 }
 
+void TcpServer::Send(int _fd, Message* _pMsg){
+		 // YU_TODO: 临时处理
+
+		int sendLen = _pMsg->m_len + 4;
+		memset(&m_pBufSend[0], 0, sizeof(m_pBufSend)); 		// 接受缓冲区清空
+		memcpy(&m_pBufSend[0], _pMsg->GetBuf(), sendLen);
+
+		send(_fd, m_pBufSend, sendLen, 0);
+}
+
 // 关闭监听套接字
 int TcpServer::Close()
 {
@@ -279,8 +289,8 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 
 	const size_t contentLenLimit = 2000;
 
-	char packetBegin 	= 0x02; 		// 双左斜杠表示包开始
-	char packetEnd 		= 0x03; 		// 双右斜杠表示包结束
+	const char packetBegin 	= 0x02; 		// 双左斜杠表示包开始
+	const char packetEnd 		= 0x03; 		// 双右斜杠表示包结束
 	size_t pos 	= 0;
 
 
@@ -316,7 +326,7 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 			pos += packetEndLen;
 			std::cout<< "a good msg package. len ="<< len<< endl;
 			// YU_TODO： 	CallBack
-			m_MsgQunue->PushMsg((msgBuf));
+			m_MsgQunue->PushRecvMsg((msgBuf));
 		}
 		else
 		{
