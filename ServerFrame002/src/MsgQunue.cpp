@@ -1,5 +1,7 @@
 #include "MsgQunue.h"
 
+int MsgQunue::sendFd;
+
 MsgQunue::MsgQunue()
 {
 	//ctor
@@ -30,14 +32,11 @@ bool MsgQunue::IsRecvEmpty(){
 }
 
 
-void MsgQunue::PushSendMsg(Message* pMsg)
+void MsgQunue::PushSendMsg(int _fd, Message* pMsg)
 {
-	/*
-	std::cout<<"Good u got:MsgBuf"<< *_pbuf<< std::endl;
-	Message MsgTemp;
-	MsgTemp.Decode(_pbuf);
-	this->MsgSend_que.push(MsgTemp);
-	*/
+	sendFd = _fd;
+	this->MsgSend_que.push(*pMsg);
+
 }
 
 Message MsgQunue::PopSendMsg(){

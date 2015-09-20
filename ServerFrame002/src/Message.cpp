@@ -69,12 +69,12 @@ void Message::Decode(char* _pbuf){
 	-------------------------------------------------------------
 	| 0x02 0x02 | len | cmd | ********内容********** | 0x03 0X03 |
 	-------------------------------------------------------------
-		  2B       2B    4B          len-4B              2B
+		  2B       4B    4B          len-4B              2B
 
 	测试数据：02 02 31 30 30 32 30 32 48 65 6C 6C 6F 20 03 03 0D
 	*/
-	const size_t lenLen = 2;
-	const size_t cmdLen = 2;
+	const size_t lenLen = 4;
+	const size_t cmdLen = 4;
 	char lenBuf[lenLen] = {0};
 	char cmdBuf[cmdLen] = {0};
 	int pos = 0;
@@ -86,8 +86,8 @@ void Message::Decode(char* _pbuf){
 	m_len = atoi(lenBuf);
 
 	// cmd
-	memcpy(cmdBuf, &(_pbuf[pos]), lenLen);
-	pos += lenLen;
+	memcpy(cmdBuf, &(_pbuf[pos]), cmdLen);
+	pos += cmdLen;
 	m_pos = pos;
 	m_cmd = (eCmd)atoi(cmdBuf);
 
@@ -105,6 +105,7 @@ void Message::Send(int _fd){
 	if(((int)m_cmd > MSG_S2C_BEGIN)
 		&& ((int)m_cmd < 60000))
 	{
+		cout<<"Sill SendMsg, cmd: " << (int)m_cmd<<endl;
 		Game::GetInstance().SendMsg2Client(_fd, this);
 	}
 

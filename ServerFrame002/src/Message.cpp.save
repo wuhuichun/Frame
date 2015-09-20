@@ -1,4 +1,5 @@
 #include "Message.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -102,10 +103,12 @@ void Message::Send(int _fd){
 
 	// YU_TODO: msg router. to server or to client
 	if(((int)m_cmd > MSG_S2C_BEGIN)
-		&& ((int)m_cmd < 60000)){
-			
-		Game::GetInstance()->SendMsg2Client(_fd, this);
-	//MsgQunue.PushSendMsg(_fd, this);
+		&& ((int)m_cmd < 60000))
+	{
+		
+		Game::GetInstance().SendMsg2Client(_fd, this);
+
+		
 	}
 
 

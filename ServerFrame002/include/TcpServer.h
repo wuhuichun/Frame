@@ -111,7 +111,7 @@ private:
 };
 
 	// 一个函数指针
-	typedef void (TcpServer::* SockCallBack)(char* _buf);
+	//typedef void (TcpServer::* SockCallBack)(char* _buf);
 
 
 #endif // TcpServer_H

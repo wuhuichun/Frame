@@ -30,3 +30,20 @@ bool MsgQunue::IsRecvEmpty(){
 }
 
 
+void MsgQunue::PushSendMsg(int _fd, Message* pMsg)
+{
+	t
+	this->MsgSend_que.push(*MsgTemp);
+
+}
+
+Message MsgQunue::PopSendMsg(){
+	Message MsgTemp = this->MsgSend_que.front();
+	this->MsgSend_que.pop();
+
+	return MsgTemp;
+}
+
+bool MsgQunue::IsSendEmpty(){
+	return MsgSend_que.empty();
+}

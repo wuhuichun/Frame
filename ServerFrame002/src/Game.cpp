@@ -73,14 +73,36 @@ void Game::Init()
 
 void Game::GameLoop(){
 	while(true){
-		if (ServerSock.GetMsgQunue()->IsRecvEmpty()){
-			continue;
+		if(!ServerSock.GetMsgQunue()->IsSendEmpty()){
+			Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
+
+			ServerSock.Send(ServerSock.GetMsgQunue()->sendFd, &msgTemp);
 		}
 
-        Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
 
-        int recvInt = msgTemp.GetInt();
-		cout<< "U recv: "<< recvInt<< endl;
+		if (!ServerSock.GetMsgQunue()->IsRecvEmpty()){
+
+			Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
+
+			switch(msgTemp.m_cmd){
+			case eCmd::C2S_Test_Hello:{
+
+				Message Msg(eCmd::S2C_Test_Hello);
+				Msg.AddInt(6);
+				Msg.Send(MsgQunue::sendFd);
+}
+			break;
+/*
+			case eCmd::C2S_System_001:
+			break;
+*/
+			default:;
+
+			}
+		}
+
+
+
 
 		//Msg ha;
 
@@ -89,5 +111,5 @@ void Game::GameLoop(){
 }
 
 void Game::SendMsg2Client(int _fd, Message* _pMsg){
-	ServerSock.Send(_fd, _pMsg);
+	ServerSock.GetMsgQunue()->PushSendMsg(_fd, _pMsg);
 }

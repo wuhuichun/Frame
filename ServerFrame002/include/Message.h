@@ -116,9 +116,10 @@ public:
 public:
 
 	size_t m_len;
+		eCmd m_cmd; 			// 消息ID
 	private:
 
-	eCmd m_cmd; 			// 消息ID
+
 	char * mp_content; 			// 消息内容缓冲区指针
 
 	int m_pos;

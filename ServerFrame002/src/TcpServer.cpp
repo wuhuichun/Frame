@@ -278,23 +278,23 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 	-------------------------------------------------------------
 	| 0x02 0x02 | len | cmd | ********内容********** | 0x03 0X03 |
 	-------------------------------------------------------------
-		  2B       2B    4B          len-4B              2B
+		  2B       4B    4B          len-8B              2B
 
 	测试数据：02 02 31 30 30 32 30 32 48 65 6C 6C 6F 20 03 03 0D
 	*/
 
 	const size_t packetBeginLen = 2;
 	const size_t packetEndLen = 2;
-	const size_t lenLen = 2;
+	const size_t lenLen = 4;
 
 	const size_t contentLenLimit = 2000;
 
-	const char packetBegin 	= 0x02; 		// 双左斜杠表示包开始
-	const char packetEnd 		= 0x03; 		// 双右斜杠表示包结束
+	const char packetBegin 	= '\2'; 		// 双左斜杠表示包开始
+	const char packetEnd 		= '\3'; 		// 双右斜杠表示包结束
 	size_t pos 	= 0;
 
 
-	while(pos+6 < _recvLen) 				//	//判断 包是否已经读完
+	while(pos+4 < _recvLen) 				//	//判断 包是否已经读完
 	{
 		// 判断包头
 		if((m_pBufRecv[pos] != packetBegin) || (m_pBufRecv[pos+1] != packetBegin)) 		// 开始符 2B
@@ -318,7 +318,7 @@ void TcpServer::UnpackAndPushInQunue(size_t _recvLen)
 
 		char msgBuf[contentLenLimit] = {0};
 		memcpy(msgBuf, &m_pBufRecv[pos], len);
-		pos += lenLen + len;
+		pos += len;
 
 		// 判断包尾
 		if((m_pBufRecv[pos] == packetEnd) && (m_pBufRecv[pos+1] == packetEnd))

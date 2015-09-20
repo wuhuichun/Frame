@@ -13,6 +13,7 @@ class MsgQunue
 public:
 	MsgQunue();
 	~MsgQunue();
+	st int sendFd = 0;
 
 	// 入队
 	void PushRecvMsg(char * _pbuf);
@@ -24,7 +25,7 @@ public:
 	bool IsRecvEmpty();
 
 		// 入队
-	void PushSendMsg(Me * _pbuf);
+	void PushSendMsg(Message * _pbuf);
 
 	// 出队
 	Message PopSendMsg();
