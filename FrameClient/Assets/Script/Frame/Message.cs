@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum eCmd
-{
-    Hello = 0x00,
-}
+
+
+
 
 
 public class Message {

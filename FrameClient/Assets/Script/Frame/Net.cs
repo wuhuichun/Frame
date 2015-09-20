@@ -7,33 +7,38 @@ using System.Collections.Generic;
 
 public class Net{
 
-    private SocketClient m_Server;
+    private SocketClient m_Server = new SocketClient();         // 服务器
 
+    private MsgRouter m_MsgRouter = new MsgRouter();            // 消息路由
+
+    
     private SocketClient GetServer()
     {
-        if (m_Server == null)
-        {
-            m_Server = new SocketClient();
-        }
-
         return m_Server;
+    }
+   
+    private MsgRouter GetMsgRouter()
+    {
+        return m_MsgRouter;
     }
 
     public void InitNetWork()
     {
+        // 注册消息路由
+        m_MsgRouter.Init();
+
+        // 启动网络
         string host = "192.168.1.107";
         int port = 9527;
-        SocketClient Server = GetServer();
 
-        Server.Init(host, port);
-        Server.Connect();
-
+        m_Server.Init(host, port);
+        m_Server.Connect();
         Debug.Log("Connect Success!");
 
         Thread thread1 = new Thread(RecvLoop);
-
         Debug.Log("Thread Start");
         thread1.Start();
+
     }
 
     public void Send2NetWork()
@@ -74,6 +79,6 @@ public class Net{
 
     private void HandleAMsg(Message Msg)
     {
-        MsgRouter.Dispatch(Msg);
+        m_MsgRouter.Dispatch(Msg);
     }
 }
