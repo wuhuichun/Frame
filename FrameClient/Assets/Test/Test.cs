@@ -16,20 +16,19 @@ public class Test : MonoBehaviour {
     public void TestFun1()
     {
         Debug.Log("TestFun1()");
-        //Game.Instance.Init();
+        Game.Instance.Init();
 
     }
 
     public void TestFun2()
     {
         Debug.Log("TestFun2()");
-        /*
+        
         Message Msg = new Message();
-        Msg.Cmd = eCmd.Hello;
-        Msg.Len = 8;
-        Msg.content = "5";
+        Msg.Cmd = eCmd.C2S_Test_Hello;
+        Msg.AddInt(5);
         Msg.Send();
-*/
+
 
     }
 
@@ -38,5 +37,11 @@ public class Test : MonoBehaviour {
         Debug.Log("TestFun3()");
 
 
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("OnDisable");
+        Game.Instance.Dispose();
     }
 }

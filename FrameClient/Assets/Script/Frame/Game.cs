@@ -34,7 +34,9 @@ public class Game{
     // 游戏扫尾
     public void Dispose()
     {
-
+        if (IsInit()) { 
+            this.GetNet().Dispose();
+        }
     }
 
     // 是否初始化
