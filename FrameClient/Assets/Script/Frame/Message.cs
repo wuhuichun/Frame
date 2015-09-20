@@ -14,7 +14,7 @@ public class Message
     private int m_len = 0;
     private byte[] m_StartFlag = new byte[2] { 0x02, 0x02 };
     private byte[] m_EndFlag = new byte[2] { 0x03, 0x03 };
-    private List<byte> m_innerContent;
+    private List<byte> m_innerContent = new List<byte>();
     private int m_position;
     #endregion
 
@@ -96,10 +96,13 @@ public class Message
 
     public void AddString(string param)
     {
-        var strLen = BitConverter.GetBytes(param.Length);
+        var len = Convert.ToInt16(param.Length);
+
+        var strLenBytes = BitConverter.GetBytes(len);
+
         var bytes = Encoding.ASCII.GetBytes(param);
 
-        m_innerContent.AddRange(strLen);
+        m_innerContent.AddRange(strLenBytes);
         m_innerContent.AddRange(bytes);
     }
 
@@ -167,11 +170,11 @@ public class Message
     public string GetString()
     {
         //先获取长度
-        var strLenBytes = m_innerContent.GetRange(m_position, 2).ToArray();
+        var strLenBytes = m_innerContent.GetRange(m_position, sizeof(Int16)).ToArray();
 
-        m_position += 2;
+        m_position += sizeof(Int16);
 
-        var strLen = BitConverter.ToInt32(strLenBytes, strLenBytes.Length);
+        var strLen = BitConverter.ToInt16(strLenBytes, strLenBytes.Length);
 
         //获取字符串
         var stringBytes = m_innerContent.GetRange(m_position, strLen).ToArray();
@@ -288,50 +291,20 @@ public class Message
     private byte[] GetMessageLenBytes()
     {
         //计算长度
-        var len = 4 + 4 + Content.Length;
-
-        var lenBytes = new byte[4];
+        var len = Convert.ToInt16(4 + 4 + Content.Length);
 
         var realLenBytes = BitConverter.GetBytes(len);
 
-        for (int i = 0; i < lenBytes.Length; i++)
-        {
-            //如果实际长度小于4
-            if (realLenBytes.Length < i)
-            {
-                lenBytes[i] = 0x00;
-            }
-            else
-            {
-                lenBytes[i] = realLenBytes[i];
-            }
-
-        }
-
-        return lenBytes;
+        return realLenBytes;
     }
 
     private byte[] GetCmdBytes()
     {
-        var cmdBytes = new byte[4];
+        var cmdValue = Convert.ToInt16(m_cmd);
 
-        var realCmdBytes = BitConverter.GetBytes((int)m_cmd);
+        var realCmdBytes = BitConverter.GetBytes(cmdValue);
 
-        for (int i = 0; i < cmdBytes.Length; i++)
-        {
-            //如果实际长度小于4
-            if (realCmdBytes.Length < i)
-            {
-                cmdBytes[i] = 0x00;
-            }
-            else
-            {
-                cmdBytes[i] = realCmdBytes[i];
-            }
-
-        }
-
-        return cmdBytes;
+        return realCmdBytes;
 
     }
 
