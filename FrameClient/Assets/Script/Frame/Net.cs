@@ -29,7 +29,7 @@ public class Net
         m_MsgRouter.Init();
 
         // 启动网络
-        string host = "192.168.1.107";
+        string host = "192.168.0.104";
         int port = 9527;
 
         m_Server.Init(host, port);
@@ -44,7 +44,7 @@ public class Net
 
     public void Send2NetWork()
     {
-        while (MsgQunue.Instance.IsSendQueEmpty())
+        while (!MsgQunue.Instance.IsSendQueEmpty())
         {
             Message Msg = MsgQunue.Instance.PopSendMsg();
             byte[] sendBuf = Msg.Package();
@@ -83,5 +83,12 @@ public class Net
     private void HandleAMsg(Message Msg)
     {
         m_MsgRouter.Dispatch(Msg);
+    }
+
+    public void Dispose()
+    {
+        if (this.m_Server.IsConnect()) { 
+            this.m_Server.Close();
+        }
     }
 }
