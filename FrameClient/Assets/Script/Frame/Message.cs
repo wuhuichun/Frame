@@ -291,7 +291,7 @@ public class Message
     private byte[] GetMessageLenBytes()
     {
         //计算长度
-        var len = Convert.ToInt16(4 + 4 + Content.Length);
+        var len = Convert.ToInt32(4 + 4 + Content.Length);
 
         var realLenBytes = BitConverter.GetBytes(len);
 
@@ -300,7 +300,7 @@ public class Message
 
     private byte[] GetCmdBytes()
     {
-        var cmdValue = Convert.ToInt16(m_cmd);
+        var cmdValue = Convert.ToInt32(m_cmd);
 
         var realCmdBytes = BitConverter.GetBytes(cmdValue);
 
