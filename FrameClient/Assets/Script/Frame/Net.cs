@@ -29,8 +29,8 @@ public class Net
         m_MsgRouter.Init();
 
         // 启动网络
-        string host = "192.168.0.104";
-        int port = 9527;
+        string host = Define.SERVER_IP;
+        int port = Define.SERVER_PORT;
 
         m_Server.Init(host, port);
         m_Server.Connect();
@@ -58,7 +58,6 @@ public class Net
         while (this.GetServer().IsConnect())
         {
             Byte[] recvBuf = this.GetServer().Recv();
-
             Message Msg = new Message();
             if (Msg.UnPackage(recvBuf))
             {

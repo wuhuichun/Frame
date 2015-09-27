@@ -198,6 +198,7 @@ public class Message
 
     public void Send()
     {
+        Debug.Log("Msg.Send, cmd:" + (int)this.m_cmd);
         MsgQunue.Instance.AddSendMsg(this);
     }
 
