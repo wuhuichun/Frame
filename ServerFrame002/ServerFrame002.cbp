@@ -43,8 +43,10 @@
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/Message.h" />
 		<Unit filename="include/MsgQunue.h" />
+		<Unit filename="include/Player.h" />
 		<Unit filename="include/TcpClient.h" />
 		<Unit filename="include/TcpServer.h" />
+		<Unit filename="include/Test.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Client.cpp" />
 		<Unit filename="src/Common.cpp" />
@@ -52,8 +54,10 @@
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/Message.cpp" />
 		<Unit filename="src/MsgQunue.cpp" />
+		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/TcpClient.cpp" />
 		<Unit filename="src/TcpServer.cpp" />
+		<Unit filename="src/Test.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

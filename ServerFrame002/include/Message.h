@@ -25,7 +25,7 @@ memo:
 
 //using namespace std;
 
-#define MSG_BLOCK 200 				// 将消息分段 每段的间隔 200
+#define MSG_BLOCK 100 				// 将消息分段 每段的间隔 200
 #define MSG_C2S_BEGIN 0
 #define MSG_S2C_BEGIN 40000
 #define MSG_LEN_MAX 640
@@ -150,15 +150,16 @@ union af{
 	float f;
 };
 
-union ad{
+union al{
 	char a[8] = {0};
-	double d;
+	long long l;
 };
 
 union as{
-	char a[8] = {0};
+	char a[2] = {0};
 	short s;
 };
+
 
 
 

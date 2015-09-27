@@ -14,7 +14,7 @@ using namespace std;
 
 int main()
 {
-    std::cout << BOLDGREEN << "hello world" << RESET << std::endl;
+    // std::cout << BOLDGREEN << "hello world" << RESET << std::endl;
 
 	Game Game1 = Game::GetInstance();
 
@@ -22,8 +22,10 @@ int main()
 
 	Game1.Init();
 
-	cout<< "Start GameLoop()"<< endl;
+
 	Game1.GameLoop();
+
+	Game1.Dispose();
 
     return 0;
 }

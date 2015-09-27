@@ -13,19 +13,19 @@ class MsgQunue
 public:
 	MsgQunue();
 	~MsgQunue();
-	st int sendFd = 0;
+	static int sendFd;
 
 	// 入队
-	void PushRecvMsg(char * _pbuf);
+	void PushRecvMsg(const Message& _pbuf);
 
 	// 出队
-	Message PopRecvMsg();
+	//Message PopRecvMsg();
 
 
 	bool IsRecvEmpty();
 
 		// 入队
-	void PushSendMsg(Message * _pbuf);
+	void PushSendMsg(const Message& pMsg);
 
 	// 出队
 	Message PopSendMsg();
@@ -33,10 +33,11 @@ public:
 
 	bool IsSendEmpty();
 
+	std::queue<Message> m_MsgRecv_que;
+	std::queue<Message> m_MsgSend_que;
 private:
 
-	std::queue<Message> MsgRecv_que;
-	std::queue<Message> MsgSend_que;
+
 
 };
 

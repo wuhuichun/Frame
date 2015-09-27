@@ -4,6 +4,7 @@
 #include "TcpClient.h"
 #include "Config.h"
 #include "Common.h"
+#include "Player.h"
 
 #include <iostream>
 #include <thread>
@@ -15,9 +16,13 @@
 class Game
 {
 private:
-		Game();
-    TcpServer ServerSock;
-    static Game* mp_Instance;
+	Game();
+
+    TcpServer m_ServerSock;
+
+    std::list<Player> m_Player_lst; 				// Player list
+
+    bool m_isEixt;
 
 public:
 
@@ -26,17 +31,15 @@ public:
 public:
 	static Game& GetInstance()
 	{
-		/*
-		if(mp_Instance == nullptr)
-		{
-			mp_Instance = new Game();
-		}
-*/
 		static Game Instance;
 		return Instance;
 	}
 
 	void Init();
+
+	void Dispose();
+
+	void Exit();
 
 	void GameLoop();
 

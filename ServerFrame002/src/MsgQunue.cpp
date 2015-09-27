@@ -1,47 +1,39 @@
 #include "MsgQunue.h"
 
+using namespace std;
+
 int MsgQunue::sendFd;
 
 MsgQunue::MsgQunue()
 {
-	//ctor
+
 }
 
 MsgQunue::~MsgQunue()
 {
-	//dtor
+
 }
 
 void MsgQunue::PushRecvMsg(const Message& _Msg)
 {
-	std::cout<<"Good u got:cmd: "<< (int)_Msg.m_cmd<< std::endl;
-	this->MsgRecv_que.push(_Msg);
+	std::cout<<"Recv a msg, fd:"<< _Msg.m_fd<< " \tcmd:"<<
+		(int)_Msg.m_cmd<< " \tlen:"<< _Msg.m_len<< std::endl;
+	this->m_MsgRecv_que.push(_Msg);
 }
 
-Message MsgQunue::PopRecvMsg(){
-	Message MsgTemp = this->MsgRecv_que.front();
-	this->MsgRecv_que.pop();
 
-	return MsgTemp;
+
+void MsgQunue::PushSendMsg(Message* pMsg)
+{
+	this->m_MsgSend_que.push(*pMsg);
 }
+
+
 
 bool MsgQunue::IsRecvEmpty(){
-	return MsgRecv_que.empty();
-}
-
-
-void MsgQunue::PushSendMsg(const Message& pMsg)
-{
-	this->MsgSend_que.push(pMsg);
-}
-
-Message MsgQunue::PopSendMsg(){
-	Message MsgTemp = this->MsgSend_que.front();
-	this->MsgSend_que.pop();
-
-	return MsgTemp;
+	return m_MsgRecv_que.empty();
 }
 
 bool MsgQunue::IsSendEmpty(){
-	return MsgSend_que.empty();
+	return m_MsgSend_que.empty();
 }

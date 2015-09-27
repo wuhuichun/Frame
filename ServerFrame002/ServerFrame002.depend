@@ -110,7 +110,7 @@
 	<memory.h>
 	<string>
 
-1442757573 source:/home/whc/桌面/Push/ServerFrame002/main.cpp
+1443316595 source:/home/whc/桌面/Push/ServerFrame002/main.cpp
 	"TcpServer.h"
 	"TcpClient.h"
 	"Common.h"
@@ -120,7 +120,7 @@
 	<thread>
 	<fstream>
 
-1442764889 /home/whc/桌面/Push/ServerFrame002/include/TcpServer.h
+1443319531 /home/whc/桌面/Push/ServerFrame002/include/TcpServer.h
 	<unistd.h>
 	<sys/types.h>
 	<sys/socket.h>
@@ -139,12 +139,12 @@
 1442761296 /home/whc/桌面/Push/ServerFrame002/include/Common.h
 	<string.h>
 
-1442764723 /home/whc/桌面/Push/ServerFrame002/include/MsgQunue.h
+1443322133 /home/whc/桌面/Push/ServerFrame002/include/MsgQunue.h
 	"Message.h"
 	<queue>
 	<iostream>
 
-1442764939 /home/whc/桌面/Push/ServerFrame002/include/Message.h
+1443324148 /home/whc/桌面/Push/ServerFrame002/include/Message.h
 	<memory.h>
 	<string>
 
@@ -162,11 +162,12 @@
 	<list>
 	<iostream>
 
-1442764473 /home/whc/桌面/Push/ServerFrame002/include/Game.h
+1443322396 /home/whc/桌面/Push/ServerFrame002/include/Game.h
 	"TcpServer.h"
 	"TcpClient.h"
 	"Config.h"
 	"Common.h"
+	"Player.h"
 	<iostream>
 	<thread>
 	<fstream>
@@ -186,21 +187,31 @@
 1442069053 source:/home/whc/桌面/Push/ServerFrame002/src/TcpClient.cpp
 	"TcpClient.h"
 
-1442764897 source:/home/whc/桌面/Push/ServerFrame002/src/Game.cpp
+1443324809 source:/home/whc/桌面/Push/ServerFrame002/src/Game.cpp
 	"Game.h"
 
-1442764658 source:/home/whc/桌面/Push/ServerFrame002/src/Message.cpp
+1443324627 source:/home/whc/桌面/Push/ServerFrame002/src/Message.cpp
 	"Message.h"
 	"Game.h"
 
-1442763542 source:/home/whc/桌面/Push/ServerFrame002/src/MsgQunue.cpp
+1443324912 source:/home/whc/桌面/Push/ServerFrame002/src/MsgQunue.cpp
 	"MsgQunue.h"
 
-1442760920 source:/home/whc/桌面/Push/ServerFrame002/src/TcpServer.cpp
+1443324859 source:/home/whc/桌面/Push/ServerFrame002/src/TcpServer.cpp
 	"TcpServer.h"
 
 1442760639 /home/whc/桌面/Push/ServerFrame002/include/Client.h
 
 1442760619 source:/home/whc/桌面/Push/ServerFrame002/src/Client.cpp
 	"Client.h"
+
+1443313638 /home/whc/桌面/Push/ServerFrame002/include/Player.h
+
+1443313638 source:/home/whc/桌面/Push/ServerFrame002/src/Player.cpp
+	"Player.h"
+
+1443313603 source:/home/whc/桌面/Push/ServerFrame002/src/Test.cpp
+	"Test.h"
+
+1443313680 /home/whc/桌面/Push/ServerFrame002/include/Test.h
 

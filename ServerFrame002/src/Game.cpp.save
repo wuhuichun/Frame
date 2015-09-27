@@ -5,11 +5,14 @@ using namespace std;
 Game::Game()
 {
 	//ctor
+	m_isEixt = false;
+	m_Player_lst.clear();
 }
 
 Game::~Game()
 {
 	//dtor
+	m_Player_lst.clear();
 }
 
 // YU_TODO:
@@ -32,19 +35,13 @@ void Game::Init()
 	Config::LoadGlobalConfig();
 
 	/// 网络启动
-
 	// 服务器部分Test
     string loginIp = Config::globalConfig_map["TestServerIp"];
     uint16_t loginPort = std::atoi( Config::globalConfig_map["TestServerPort"].c_str() );
+    m_ServerSock.Init(loginIp, loginPort);
 
-
-    ServerSock.Init(loginIp, loginPort);
-
-	MsgQunue MsgQue;
-	ServerSock.SetMsgQunue(&MsgQue);
-
-	std::thread thread1(hello, &ServerSock);
-	thread1.join();
+	std::thread thread1(hello, &m_ServerSock);
+	thread1.detach();
 
 
 
@@ -71,43 +68,70 @@ void Game::Init()
 //	}
 }
 
-void Game::GameLoop(){
-	while(true){
-			cout<<"GameLoop()"<<endl;
 
-		if(!ServerSock.GetMsgQunue()->IsSendEmpty()){
-			Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
-			std::cout<<"Send Msg, cmd:"<< (int)msgTemp.m_cmd<< endl;
-			ServerSock.Send(msgTemp);  //ServerSock.GetMsgQunue()->sendFd,
+void Game::Dispose()
+{
+
+}
+
+
+void Game::GameLoop(){
+	cout<< "Start GameLoop()"<< endl;
+	while(!m_isEixt){
+
+		if(!m_ServerSock.GetMsgQunue().IsSendEmpty()){
+			Message Msg = m_ServerSock.GetMsgQunue().m_MsgSend_que.front();
+
+			m_ServerSock.Send(&Msg);
+
+			m_ServerSock.GetMsgQunue().m_MsgSend_que.pop();
 		}
 
-
-		if (!ServerSock.GetMsgQunue()->IsRecvEmpty()){
-
-			Message msgTemp = ServerSock.GetMsgQunue()->PopRecvMsg();
-
-			switch(msgTemp.m_cmd){
+		if (!m_ServerSock.GetMsgQunue().IsRecvEmpty()){
+			Message Msg = m_ServerSock.GetMsgQunue().m_MsgRecv_que.front();
+			cout<< "GameLoop() 2.2"<< endl;
+			switch(Msg.m_cmd){
 				case eCmd::C2S_Test_Hello:
 				{
-					Message Msg(MsgQunue::sendFd, eCmd::S2C_Test_Hello);
-					Msg.AddInt(6);
-					Msg.Send();
+					cout<< "GameLoop() 2.3, "<< endl;
+					Message MsgSend(Msg.m_fd, eCmd::S2C_Test_Hello);
+					cout<< "GameLoop() 2.4"<< endl;
+					MsgSend.AddInt(6);
+					cout<< "GameLoop() 2.5"<< endl;
+					this->SendMsg2Client(&MsgSend);
 				}
 				break;
 
 				default:;
 
 			}
+
+			m_ServerSock.GetMsgQunue().m_MsgRecv_que.pop();
 		}
-
-
 	}
 
 }
 
-void Game::SendMsg2Client(const Message& _pMsg){
-	
-	
-	
-	ServerSock.GetMsgQunue()->PushSendMsg(_pMsg);
+// exit
+void Game::Exit(){
+	m_isEixt = true;
+}
+
+void Game::SendMsg2Client(Message* _pMsg){
+
+	_pMsg->Encode();
+
+	// YU_TODO: msg router. to server or to client
+	int cmd = (int)_pMsg->m_cmd;
+	if(( MSG_S2C_BEGIN< cmd ) && (cmd < 60000))
+	{
+		//cout<<"Sill SendMsg, cmd: " << cmd<<endl;
+
+			m_ServerSock.GetMsgQunue().PushSendMsg(_pMsg);
+	}
+	else{
+		cout<< "Error at Msg.Send(), sorry, I don't know which shall I send to."<< endl;
+	}
+
+
 }
