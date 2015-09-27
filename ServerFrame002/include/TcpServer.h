@@ -67,7 +67,7 @@ public:
 	// SockCallBack m_CallBack;
 	void SetMsgQunue(MsgQunue* ptr);
 
-	MsgQunue* GetMsgQunue();
+	MsgQunue& GetMsgQunue();
 
 	//
 	void Send(Message* _Msg);
@@ -84,7 +84,7 @@ private:
 	//SockCallBack OnRecvFunc; 					// 接受到消息的回调函数
 	std::list<Client> m_Client_lst; 			// 所有客户端链接信息
 
-    MsgQunue* m_MsgQunue;
+    MsgQunue m_MsgQunue;
 
 	// 创建套接字地址结构
 	int Create();

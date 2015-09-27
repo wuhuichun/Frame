@@ -11,12 +11,13 @@ Message::Message(int _fd)
 	m_fd = _fd;
 	m_pos = 0;
 
-
+//cout<< "Create a recv msg, _fd:"<< m_fd<< endl;
 }
 
 // ctor send message
 Message::Message(int _fd, eCmd _cmd)
 {
+
 	//ctor
 	m_fd = _fd;
 	m_pos = 0;
@@ -34,10 +35,15 @@ Message::Message(int _fd, eCmd _cmd)
 	const int cmdLen = 4;
 	memcpy(&(mp_content[m_pos]), &m_cmd, cmdLen);
 	m_pos += cmdLen;
+
+	//cout<< "Create a send msg, _fd:"<< m_fd<< endl;
 }
 
 Message::Message(const Message & _Msg)
 {
+	// YU_TODO: open this display.
+	//cout<< "call copy Message()"<< endl;
+
 	m_fd = _Msg.m_fd;
 	m_len = _Msg.m_len;
 	m_cmd = _Msg.m_cmd;
@@ -207,13 +213,12 @@ void  Message::AddShort(short _value)
 int Message::GetInt()
 {
 	const int len = 4;
-	char retBUf[len] = {0};
 	ai ret;
 
 	memcpy(ret.a, &(mp_content[m_pos]), len);
 	m_pos += len;
 
-	int retValue = ret.i; // atoi(retBUf);
+	int retValue = ret.i;
 	return retValue;
 
 }
@@ -233,18 +238,21 @@ long long Message::GetLong()
 {
 	const int len = 8;
 	char retBUf[len] = {0};
+	al ret;
 
-	memcpy(retBUf, &(mp_content[m_pos]), len);
+	memcpy(ret.a, &(mp_content[m_pos]), len);
 	m_pos += len;
 
-	int ret = atol(retBUf);
-	return ret;
+	return ret.l;
 }
 
 void  Message::AddLong(long long _value)
 {
 	const int len = 8;
-	memcpy(&(mp_content[m_pos]), &_value, len);
+	al value;
+	value.l = _value;
+
+	memcpy(&(mp_content[m_pos]), value.a, len);
 	m_pos += len;
 }
 
@@ -252,19 +260,22 @@ void  Message::AddLong(long long _value)
 float Message::GetFloat()
 {
 	const int len = 4;
-	char retBUf[len] = {0};
+	af ret;
 
-	memcpy(retBUf, &(mp_content[m_pos]), len);
+	memcpy(ret.a, &(mp_content[m_pos]), len);
 	m_pos += len;
 
-	float ret = atof(retBUf);
-	return ret;
+	int retValue = ret.f;
+	return retValue;
 }
 
 void  Message::AddFloat(float _value)
 {
 	const int len = 4;
-	memcpy(&(mp_content[m_pos]), &_value, len);
+	af value;
+	value.f = _value;
+
+	memcpy(&(mp_content[m_pos]), value.a, len);
 	m_pos += len;
 }
 

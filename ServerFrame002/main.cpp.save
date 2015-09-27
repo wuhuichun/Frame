@@ -12,29 +12,20 @@
 
 using namespace std;
 
-
-
-
-
-
 int main()
 {
-//    cout << "Hello world!" << endl;
     std::cout << BOLDGREEN << "hello world" << RESET << std::endl;
 
-	Game Game1;
+	Game Game1 = Game::GetInstance();
 
-	Game1Init();
+//	std::cout<< pGame<<endl;
 
+	Game1.Init();
 
+	cout<< "Start GameLoop()"<< endl;
+	Game1.GameLoop();
 
-
-
-
-
-
-
-
+	
 
     return 0;
 }

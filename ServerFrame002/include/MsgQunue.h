@@ -17,26 +17,16 @@ public:
 
 	// 入队
 	void PushRecvMsg(const Message& _pbuf);
-
-	// 出队
-	Message PopRecvMsg();
-
+	void PushSendMsg(Message* pMsg);
 
 	bool IsRecvEmpty();
-
-		// 入队
-	void PushSendMsg(const Message& pMsg);
-
-	// 出队
-	Message PopSendMsg();
-
-
 	bool IsSendEmpty();
 
+	std::queue<Message> m_MsgRecv_que;
+	std::queue<Message> m_MsgSend_que;
 private:
 
-	std::queue<Message> MsgRecv_que;
-	std::queue<Message> MsgSend_que;
+
 
 };
 

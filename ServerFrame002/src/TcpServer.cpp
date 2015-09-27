@@ -226,13 +226,13 @@ void TcpServer::OnConnectRecvMsg(fd_set & _Fset)
 }
 
 void TcpServer::Send(Message* _pMsg){
-		 // YU_TODO: 临时处理
-
 		int sendLen = _pMsg->m_len + 4;
 		memset(&m_pBufSend[0], 0, sizeof(m_pBufSend)); 		// 接受缓冲区清空
 		memcpy(&m_pBufSend[0], _pMsg->GetBuf(), sendLen);
 
 		send(_pMsg->m_fd, m_pBufSend, sendLen, 0);
+		std::cout<<"Send a msg, fd:"<< _pMsg->m_fd<< " \tcmd:"<< (int)_pMsg->m_cmd<<
+			" \tlen:"<< _pMsg->m_len<< endl;
 }
 
 // 关闭监听套接字
@@ -257,11 +257,11 @@ int TcpServer::ShutDownAConnect(int _fd)
 }
 
 void TcpServer::SetMsgQunue(MsgQunue* ptr){
-    this->m_MsgQunue = ptr;
+    m_MsgQunue = *ptr;
 }
 
-MsgQunue* TcpServer::GetMsgQunue(){
-	return this->m_MsgQunue;
+MsgQunue& TcpServer::GetMsgQunue(){
+	return m_MsgQunue;
 }
 
 
@@ -322,12 +322,10 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 		if((m_pBufRecv[pos] == packetEnd) && (m_pBufRecv[pos+1] == packetEnd))
 		{
 			pos += packetEndLen;
-			std::cout<< "a good msg package. len ="<< len<< endl;
-
 			Message Msg(_fd);
 			Msg.Decode(msgBuf);
 
-			m_MsgQunue->PushRecvMsg(Msg);
+			m_MsgQunue.PushRecvMsg(Msg);
 		}
 		else
 		{
