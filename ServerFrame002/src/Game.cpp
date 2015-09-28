@@ -93,10 +93,15 @@ void Game::GameLoop(){
 			switch(Msg.m_cmd){
 				case eCmd::C2S_Test_Hello:
 				{
-					//cout<< "GameLoop() 2.3, "<< endl;
+
+					string getf = Msg.GetString();
+					short getI = Msg.GetShort();
+
+					cout<< "GameLoop() 2.3, getf:"<< getf<< " getI:"<< getI<<endl;
 					Message MsgSend(Msg.m_fd, eCmd::S2C_Test_Hello);
 					//cout<< "GameLoop() 2.4"<< endl;
-					MsgSend.AddInt(6);
+					MsgSend.AddString("world");
+					MsgSend.AddShort(9);
 					//cout<< "GameLoop() 2.5"<< endl;
 					SendMsg2Client(&MsgSend);
 				}

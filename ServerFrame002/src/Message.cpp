@@ -6,18 +6,12 @@ using namespace std;
 // ctor recv message
 Message::Message(int _fd)
 {
-
-	//ctor
 	m_fd = _fd;
-	m_pos = 0;
-
-//cout<< "Create a recv msg, _fd:"<< m_fd<< endl;
 }
 
 // ctor send message
 Message::Message(int _fd, eCmd _cmd)
 {
-
 	//ctor
 	m_fd = _fd;
 	m_pos = 0;
@@ -26,34 +20,34 @@ Message::Message(int _fd, eCmd _cmd)
 	mp_content = new char[MSG_LEN_MAX];
 	memset(mp_content, 0, MSG_LEN_MAX);
 
-	memset(&(mp_content[m_pos]), '\2', 2);
-	m_pos += 2;
+	const int startLen = 2;
+	memset(&(mp_content[m_pos]), '\2', startLen);
+	m_pos += startLen;
 
 	const int lenLen = 4;
-	m_pos += 4;
+	m_pos += lenLen;
 
 	const int cmdLen = 4;
 	memcpy(&(mp_content[m_pos]), &m_cmd, cmdLen);
 	m_pos += cmdLen;
 
+	m_len = lenLen + cmdLen;
 	//cout<< "Create a send msg, _fd:"<< m_fd<< endl;
 }
 
 Message::Message(const Message & _Msg)
 {
 	// YU_TODO: open this display.
-	//cout<< "call copy Message()"<< endl;
+	cout<< "call copy Message()"<< endl;
 
 	m_fd = _Msg.m_fd;
 	m_len = _Msg.m_len;
 	m_cmd = _Msg.m_cmd;
+	m_pos = _Msg.m_pos;
 
-	mp_content = new char[m_len];
-	memcpy(mp_content, _Msg.mp_content, m_len);
+	mp_content = new char[m_len + 4];
+	memcpy(mp_content, _Msg.mp_content, m_len + 4);
 
-
-
-	//ctor
 }
 
 Message::~Message()
@@ -63,17 +57,18 @@ Message::~Message()
 }
 
 void Message::Encode(){
-	m_len = m_pos - 2;
+	// m_len
+	//m_len = m_pos - 2;
 	const int lenLen = 4;
 	memcpy(&(mp_content[2]), &m_len, lenLen);
 
-	memset(&(mp_content[m_pos]), '\3', 2);
-	m_pos += 2;
-
-
+	// end
+	const int endLen = 2;
+	memset(&(mp_content[m_pos]), '\3', endLen);
+	m_pos += endLen;
 }
 
-void Message::Decode(char* _pbuf){
+void Message::Decode(char* _pbuf, size_t _totalLen){
 	/* 包描述 cmd + 内容 才是真真的消息
 	-------------------------------------------------------------
 	| 0x02 0x02 | len | cmd | ********内容********** | 0x03 0X03 |
@@ -82,30 +77,26 @@ void Message::Decode(char* _pbuf){
 
 	测试数据：02 02 31 30 30 32 30 32 48 65 6C 6C 6F 20 03 03 0D
 	*/
+	const size_t startLen = 2;
+	const size_t endLen = 2;
 	const size_t lenLen = 4;
 	const size_t cmdLen = 4;
-	char lenBuf[lenLen] = {0};
-	char cmdBuf[cmdLen] = {0};
-	int pos = 0;
-	m_pos = 0;
 
-	// len
-	alen len;
-	memcpy(len.a, &(_pbuf[pos]), lenLen);
+	// content
+	mp_content = new char[_totalLen];
+	memcpy(mp_content, _pbuf, _totalLen);
+
+	int pos = startLen;				// after startLen
+
+	m_len = _totalLen - startLen - endLen;
 	pos += lenLen;
-	m_len = len.i; 		//	atoi(lenBuf);
 
 	// cmd
 	ai cmd;
 	memcpy(cmd.a, &(_pbuf[pos]), cmdLen);
+	m_cmd = (eCmd)cmd.i;
 	pos += cmdLen;
-	m_pos = pos;
-	m_cmd = (eCmd)cmd.i; // (eCmd)atoi(cmdBuf);
-
-	// content
-	mp_content = new char[m_len];
-	memcpy(mp_content, _pbuf, m_len);
-
+	m_pos =  pos;
 }
 
 /*
@@ -148,6 +139,7 @@ void  Message::AddChar(char _value)
 	const int len = 1;
 	memcpy(&(mp_content[m_pos]), &_value, len);
 	m_pos += len;
+	m_len += len;
 }
 
 //
@@ -178,10 +170,12 @@ void  Message::AddString(std::string _value)
 	const int lenLen = 2;
 	memcpy(&(mp_content[m_pos]), len.a, lenLen);
 	m_pos += lenLen;
+	m_len += lenLen;
 
 	int16_t strLen = len.s;//_value.length();
 	memcpy(&(mp_content[m_pos]), &_value, strLen);
 	m_pos += strLen;
+	m_len += strLen;
 }
 
 //
@@ -207,6 +201,7 @@ void  Message::AddShort(short _value)
 
 	memcpy(&(mp_content[m_pos]), value.a, len);
 	m_pos += len;
+	m_len += len;
 }
 
 //
@@ -214,13 +209,12 @@ int Message::GetInt()
 {
 	const int len = 4;
 	ai ret;
+	cout<<"GetInt m_pos:"<< m_pos<< endl;
 
 	memcpy(ret.a, &(mp_content[m_pos]), len);
 	m_pos += len;
 
-	int retValue = ret.i;
-	return retValue;
-
+	return ret.i;
 }
 
 void  Message::AddInt(int _value)
@@ -229,11 +223,12 @@ void  Message::AddInt(int _value)
 	ai value;
 	value.i = _value;
 
-	memcpy(&(mp_content[m_pos]), value.a, len);
+	memcpy(&(mp_content[m_pos]), &value.a[0], len);
 	m_pos += len;
+	m_len += len;
 }
 
-	//
+//
 long long Message::GetLong()
 {
 	const int len = 8;
@@ -254,9 +249,10 @@ void  Message::AddLong(long long _value)
 
 	memcpy(&(mp_content[m_pos]), value.a, len);
 	m_pos += len;
+	m_len += len;
 }
 
-	//
+//
 float Message::GetFloat()
 {
 	const int len = 4;
@@ -265,8 +261,7 @@ float Message::GetFloat()
 	memcpy(ret.a, &(mp_content[m_pos]), len);
 	m_pos += len;
 
-	int retValue = ret.f;
-	return retValue;
+	return ret.f;
 }
 
 void  Message::AddFloat(float _value)
@@ -277,6 +272,7 @@ void  Message::AddFloat(float _value)
 
 	memcpy(&(mp_content[m_pos]), value.a, len);
 	m_pos += len;
+	m_len += len;
 }
 
 //
@@ -284,6 +280,7 @@ bool Message::GetBool()
 {
 	const int len = 1;
 	char retBuf = '0';
+	cout<<"GetBool m_pos:"<< m_pos<< endl;
 
 	memcpy(&retBuf, &(mp_content[m_pos]), len);
 	m_pos += len;
@@ -297,4 +294,5 @@ void  Message::AddBool(bool _value)
 	const int len = 1;
 	memcpy(&(mp_content[m_pos]), &_value, len);
 	m_pos += len;
+	m_len += len;
 }

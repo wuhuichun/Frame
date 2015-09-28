@@ -74,7 +74,7 @@ public:
 	~Message();
 
 	// 将mp_buf 反序列化
-	void Decode(char * _buf);
+	void Decode(char * _buf, size_t _len);
 
 	// 将mp_buf 序列化
 	void Encode();
@@ -117,14 +117,14 @@ public:
 	int m_fd;
 	size_t m_len;
 	eCmd m_cmd; 			// 消息ID
-
-
-	private:
-
-
-	char * mp_content; 			// 消息内容缓冲区指针
-
 	int m_pos;
+
+private:
+
+
+	char * mp_content; 			// 消息内容缓冲区指针 include starBuf and endBuf
+
+
 
 
 

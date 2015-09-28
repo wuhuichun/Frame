@@ -89,16 +89,21 @@ void Game::GameLoop(){
 
 		if (!m_ServerSock.GetMsgQunue().IsRecvEmpty()){
 			Message Msg = m_ServerSock.GetMsgQunue().m_MsgRecv_que.front();
-			cout<< "GameLoop() 2.2"<< endl;
+			//cout<< "GameLoop() 2.2"<< endl;
 			switch(Msg.m_cmd){
 				case eCmd::C2S_Test_Hello:
 				{
-					cout<< "GameLoop() 2.3, "<< endl;
+
+					float getf = Msg.GetFloat();
+					int getI = Msg.GetInt();
+
+					cout<< "GameLoop() 2.3, getf:"<< getf<< " getI:"<< getI<<endl;
 					Message MsgSend(Msg.m_fd, eCmd::S2C_Test_Hello);
-					cout<< "GameLoop() 2.4"<< endl;
-					MsgSend.AddInt(6);
-					cout<< "GameLoop() 2.5"<< endl;
-					this->SendMsg2Client(&MsgSend);
+					//cout<< "GameLoop() 2.4"<< endl;
+					MsgSend.AddFloat(6.2f);
+					MsgSend.AddInt(9);
+					//cout<< "GameLoop() 2.5"<< endl;
+					SendMsg2Client(&MsgSend);
 				}
 				break;
 

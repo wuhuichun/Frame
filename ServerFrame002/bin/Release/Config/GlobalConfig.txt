@@ -1,15 +1,7 @@
-// Test1
-Hello:100
-
 // Test服务器IP地址
-TestServerIp:192.168.1.108
+TestServerIp:192.168.1.107
 
 // Test服务器Port
 TestServerPort:9527
 
-// Login服务器IP地址
-LoginServerIp:192.168.1.114
-
-// Login服务器Port
-LoginServerPort:9527
 

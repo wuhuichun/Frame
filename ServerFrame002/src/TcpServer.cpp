@@ -227,10 +227,10 @@ void TcpServer::OnConnectRecvMsg(fd_set & _Fset)
 
 void TcpServer::Send(Message* _pMsg){
 		int sendLen = _pMsg->m_len + 4;
-		memset(&m_pBufSend[0], 0, sizeof(m_pBufSend)); 		// 接受缓冲区清空
-		memcpy(&m_pBufSend[0], _pMsg->GetBuf(), sendLen);
+//		memset(&m_pBufSend[0], 0, sizeof(m_pBufSend)); 		// 接受缓冲区清空
+//		memcpy(&m_pBufSend[0], _pMsg->GetBuf(), sendLen);
 
-		send(_pMsg->m_fd, m_pBufSend, sendLen, 0);
+		send(_pMsg->m_fd, _pMsg->GetBuf(), sendLen, 0);
 		std::cout<<"Send a msg, fd:"<< _pMsg->m_fd<< " \tcmd:"<< (int)_pMsg->m_cmd<<
 			" \tlen:"<< _pMsg->m_len<< endl;
 }
@@ -281,7 +281,7 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 	const size_t packetEndLen = 2;
 	const size_t lenLen = 4;
 
-	const size_t contentLenLimit = 2000;
+	const size_t contentLenLimit = MSG_LEN_MAX;
 
 	const char packetBegin 	= '\2'; 		// 双左斜杠表示包开始
 	const char packetEnd 		= '\3'; 		// 双右斜杠表示包结束
@@ -297,39 +297,40 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 			return;
 		}
 
-		pos += packetBeginLen;
+		//pos += packetBeginLen;
 
-		char lenBuf[lenLen] = {0}; 									// 包len 2B
+		//char lenBuf[lenLen] = {0}; 									// 包len 2B
 		alen lensss;
-		memcpy(lenBuf, &m_pBufRecv[pos], lenLen);
+		//memcpy(lenBuf, &m_pBufRecv[pos], lenLen);
 
-		memcpy(lensss.a, &m_pBufRecv[pos], lenLen);
-		int lennnn = lensss.i;
-		size_t len = _recvLen -packetBeginLen - packetEndLen; 		//(size_t)atoi(lenBuf);
+		memcpy(lensss.a, &m_pBufRecv[pos + packetBeginLen], lenLen);
+		int len = lensss.i;
+		size_t msgTotalLen = len + packetBeginLen + packetEndLen;// _recvLen -packetBeginLen - packetEndLen; 		//(size_t)atoi(lenBuf);
 
 		// 如果一个包长度大于contentLenLimit 就被认为是坏包被抛弃掉
-		if(len > contentLenLimit)
+		if(msgTotalLen > contentLenLimit)
 		{
-			std::cout<< "u got a bad package. len ="<< len<< "beyond 2000."<<endl;
+			std::cout<< "u got a bad package. len ="<< msgTotalLen<< "beyond 1024."<<endl;
 			return;
 		}
 
 		char msgBuf[contentLenLimit] = {0};
-		memcpy(msgBuf, &m_pBufRecv[pos], len);
-		pos += len;
+		memcpy(msgBuf, &m_pBufRecv[pos], msgTotalLen);
+
 
 		// 判断包尾
-		if((m_pBufRecv[pos] == packetEnd) && (m_pBufRecv[pos+1] == packetEnd))
+		pos += msgTotalLen;
+		int endIndex = pos - packetEndLen;
+		if((m_pBufRecv[endIndex] == packetEnd) && (m_pBufRecv[endIndex+1] == packetEnd))
 		{
-			pos += packetEndLen;
 			Message Msg(_fd);
-			Msg.Decode(msgBuf);
+			Msg.Decode(msgBuf, msgTotalLen);
 
 			m_MsgQunue.PushRecvMsg(Msg);
 		}
 		else
 		{
-			std::cout<< "a bad package. end error.. len ="<< len<< endl;
+			std::cout<< "a bad package. end error.. len ="<< msgTotalLen<< endl;
 			return ;
 		}
 
