@@ -58,10 +58,6 @@ public class MsgRouter {
 
     }
 
-    public void PrintHello(Message Msg)
-    {
-        Debug.Log("Hello");
-    }
 
     private void Register(eCmd cmd, Action<Message> fun)
     {
@@ -77,6 +73,14 @@ public class MsgRouter {
     {
         Register(eCmd.S2C_Test_Hello, PrintHello);
         // TODO: 请在下面注册你的消息
+    }
+
+
+    public void PrintHello(Message Msg)
+    {
+        Debug.Log("Hello, ");
+        Debug.Log("int1 :" + Msg.GetString());
+        Debug.Log("int2 :" + Msg.GetShort());
     }
 
 }
