@@ -29,7 +29,7 @@ memo:
 
 #define MAX_CONNECT 1000 						// 客户端最大链接数
 #ifndef BUF_MAX_SIZE
-#define BUF_MAX_SIZE 5320  						// 收发缓冲区大小， *超出不处理 并提示错误
+#define BUF_MAX_SIZE 4096 *8 					// 收发缓冲区大小， *超出不处理 并提示错误
 #endif // BUF_MAX_SIZE
 
 typedef struct sockaddr_in SockAddr4; 			// IP4 套接字地址结构
