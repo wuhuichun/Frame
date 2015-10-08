@@ -1,5 +1,6 @@
 #include "Message.h"
 #include "Game.h"
+//#include "codecvt.h"
 
 using namespace std;
 
@@ -158,6 +159,9 @@ std::string Message::GetString()
 	m_pos += strLen;
     memset(&(strBuf[strLen]), '\0', 1);
 
+	//std::string_convert<std::codecvt_utf8<char>> conv;
+	//std::string strRet = conv.from_bytes(strBuf);
+
 	std::string strRet = strBuf;
 	return strRet;
 }
@@ -173,7 +177,7 @@ void  Message::AddString(std::string _value)
 	m_len += lenLen;
 
 	int16_t strLen = len.s;//_value.length();
-	memcpy(&(mp_content[m_pos]), &_value, strLen);
+	memcpy(&(mp_content[m_pos]), _value.c_str(), strLen);
 	m_pos += strLen;
 	m_len += strLen;
 }

@@ -290,6 +290,8 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 
 	while(pos+4 < _recvLen) 				//	//判断 包是否已经读完
 	{
+		cout<< "pos:"<< pos<< endl;
+		cout<< m_pBufRecv[pos]<< endl;
 		// 判断包头
 		if((m_pBufRecv[pos] != packetBegin) || (m_pBufRecv[pos+1] != packetBegin)) 		// 开始符 2B
 		{
@@ -303,14 +305,15 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 		alen lensss;
 		//memcpy(lenBuf, &m_pBufRecv[pos], lenLen);
 
-		memcpy(lensss.a, &m_pBufRecv[pos], lenLen);
+		memcpy(lensss.a, &m_pBufRecv[pos + packetBeginLen], lenLen);
 		int len = lensss.i;
-		size_t msgTotalLen = len + 4;// _recvLen -packetBeginLen - packetEndLen; 		//(size_t)atoi(lenBuf);
+		size_t msgTotalLen = len + packetBeginLen + packetEndLen;// _recvLen -packetBeginLen - packetEndLen; 		//(size_t)atoi(lenBuf);
 
 		// 如果一个包长度大于contentLenLimit 就被认为是坏包被抛弃掉
 		if(msgTotalLen > contentLenLimit)
 		{
-			std::cout<< "u got a bad package. len ="<< msgTotalLen<< "beyond 1024."<<endl;
+			std::cout<< "u got a bad package. len ="<< msgTotalLen<< "beyond "
+			<< msgTotalLen<<endl;
 			return;
 		}
 
@@ -320,11 +323,12 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 
 		// 判断包尾
 		pos += msgTotalLen;
-		int endIndexb
-		if((m_pBufRecv[pos] == packetEnd) && (m_pBufRecv[pos+1] == packetEnd))
+		int endIndex = pos - packetEndLen;
+		cout<< "endI"
+		if((m_pBufRecv[endIndex] == packetEnd) && (m_pBufRecv[endIndex+1] == packetEnd))
 		{
 			Message Msg(_fd);
-			Msg.Decode(msgBuf);
+			Msg.Decode(msgBuf, msgTotalLen);
 
 			m_MsgQunue.PushRecvMsg(Msg);
 		}

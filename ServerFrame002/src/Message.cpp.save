@@ -1,18 +1,13 @@
 #include "Message.h"
 #include "Game.h"
+#
 
 using namespace std;
 
 // ctor recv message
 Message::Message(int _fd)
 {
-
-	//ctor
 	m_fd = _fd;
-//	m_pos = 0;
-//	m_len = 0;
-
-//cout<< "Create a recv msg, _fd:"<< m_fd<< endl;
 }
 
 // ctor send message
@@ -74,7 +69,7 @@ void Message::Encode(){
 	m_pos += endLen;
 }
 
-void Message::Decode(char* _pbuf, size_t _len){
+void Message::Decode(char* _pbuf, size_t _totalLen){
 	/* 包描述 cmd + 内容 才是真真的消息
 	-------------------------------------------------------------
 	| 0x02 0x02 | len | cmd | ********内容********** | 0x03 0X03 |
@@ -89,12 +84,12 @@ void Message::Decode(char* _pbuf, size_t _len){
 	const size_t cmdLen = 4;
 
 	// content
-	mp_content = new char[_len];
-	memcpy(mp_content, _pbuf, _len);
+	mp_content = new char[_totalLen];
+	memcpy(mp_content, _pbuf, _totalLen);
 
 	int pos = startLen;				// after startLen
 
-	m_len = _len - startLen - endLen;
+	m_len = _totalLen - startLen - endLen;
 	pos += lenLen;
 
 	// cmd
@@ -102,9 +97,7 @@ void Message::Decode(char* _pbuf, size_t _len){
 	memcpy(cmd.a, &(_pbuf[pos]), cmdLen);
 	m_cmd = (eCmd)cmd.i;
 	pos += cmdLen;
-
-
-
+	m_pos =  pos;
 }
 
 /*
@@ -166,7 +159,10 @@ std::string Message::GetString()
 	m_pos += strLen;
     memset(&(strBuf[strLen]), '\0', 1);
 
-	std::string strRet = strBuf;
+	std::string_convert<std::codecvt_utf8<char>> conv;
+	std::string strRet = conv.from_bytes(strBuf);
+
+	//std::string strRet = strBuf;
 	return strRet;
 }
 
@@ -181,7 +177,7 @@ void  Message::AddString(std::string _value)
 	m_len += lenLen;
 
 	int16_t strLen = len.s;//_value.length();
-	memcpy(&(mp_content[m_pos]), &_value, strLen);
+	memcpy(&(mp_content[m_pos]), _value.c_str(), strLen);
 	m_pos += strLen;
 	m_len += strLen;
 }
@@ -217,9 +213,10 @@ int Message::GetInt()
 {
 	const int len = 4;
 	ai ret;
+	cout<<"GetInt m_pos:"<< m_pos<< endl;
+
 	memcpy(ret.a, &(mp_content[m_pos]), len);
 	m_pos += len;
-
 
 	return ret.i;
 }
@@ -235,7 +232,7 @@ void  Message::AddInt(int _value)
 	m_len += len;
 }
 
-	//
+//
 long long Message::GetLong()
 {
 	const int len = 8;
@@ -259,7 +256,7 @@ void  Message::AddLong(long long _value)
 	m_len += len;
 }
 
-	//
+//
 float Message::GetFloat()
 {
 	const int len = 4;
@@ -287,6 +284,7 @@ bool Message::GetBool()
 {
 	const int len = 1;
 	char retBuf = '0';
+	cout<<"GetBool m_pos:"<< m_pos<< endl;
 
 	memcpy(&retBuf, &(mp_content[m_pos]), len);
 	m_pos += len;

@@ -290,6 +290,8 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 
 	while(pos+4 < _recvLen) 				//	//判断 包是否已经读完
 	{
+		cout<< "pos:"<< pos<< endl;
+		cout<< m_pBufRecv[pos]<< endl;
 		// 判断包头
 		if((m_pBufRecv[pos] != packetBegin) || (m_pBufRecv[pos+1] != packetBegin)) 		// 开始符 2B
 		{
@@ -310,7 +312,8 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 		// 如果一个包长度大于contentLenLimit 就被认为是坏包被抛弃掉
 		if(msgTotalLen > contentLenLimit)
 		{
-			std::cout<< "u got a bad package. len ="<< msgTotalLen<< "beyond 1024."<<endl;
+			std::cout<< "u got a bad package. len ="<< msgTotalLen<< "beyond "
+			<< msgTotalLen<<endl;
 			return;
 		}
 
@@ -321,6 +324,7 @@ void TcpServer::UnpackAndPushInQunue(int _fd, size_t _recvLen)
 		// 判断包尾
 		pos += msgTotalLen;
 		int endIndex = pos - packetEndLen;
+		cout<< "endIndex: "<< endIndex<<endl;
 		if((m_pBufRecv[endIndex] == packetEnd) && (m_pBufRecv[endIndex+1] == packetEnd))
 		{
 			Message Msg(_fd);
