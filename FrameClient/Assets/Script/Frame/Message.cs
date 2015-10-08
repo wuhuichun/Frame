@@ -266,7 +266,7 @@ public class Message
 
         var strLenBytes = BitConverter.GetBytes(len);
 
-        var bytes = Encoding.ASCII.GetBytes(param);
+        var bytes = Encoding.UTF8.GetBytes(param);
 
         m_innerContent.AddRange(strLenBytes);
         m_innerContent.AddRange(bytes);
@@ -348,7 +348,7 @@ public class Message
 
         m_position += strLen;
 
-        return Encoding.ASCII.GetString(stringBytes);
+        return Encoding.UTF8.GetString(stringBytes);
     }
 
     public bool GetBool()
