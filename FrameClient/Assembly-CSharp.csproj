@@ -45,7 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Script\Frame\Define.cs" />
+     <Compile Include="Assets\Script\Define.cs" />
      <Compile Include="Assets\Script\Frame\Game.cs" />
      <Compile Include="Assets\Script\Frame\GameDriver.cs" />
      <Compile Include="Assets\Script\Frame\Message.cs" />
@@ -54,11 +54,17 @@
      <Compile Include="Assets\Script\Frame\Net.cs" />
      <Compile Include="Assets\Script\Frame\SocketClient.cs" />
      <Compile Include="Assets\Test\Test.cs" />
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>D:/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>

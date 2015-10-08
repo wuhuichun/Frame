@@ -25,14 +25,19 @@ public class SocketClient{
 
     public bool IsConnect()
     {
+        if (m_sock == null)
+        {
+            return false;
+        }
+
         return m_sock.Connected;
     }
 
     public void Connect()
     {
-        Debug.Log("Contenting...");
+        //Debug.Log("Contenting...");
         m_sock.Connect(m_Ipe);
-        Debug.Log("Contented");
+        //Debug.Log("Contented");
     }
 
     public void Send(byte[] buf)
@@ -46,7 +51,11 @@ public class SocketClient{
         int len;
 
         len = m_sock.Receive(recvBytes, recvBytes.Length, 0);
-        
+        if (len > 644)
+        {
+            return null;
+        }
+
         return recvBytes;        
     }
 

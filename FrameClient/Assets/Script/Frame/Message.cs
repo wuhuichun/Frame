@@ -9,6 +9,12 @@ using System.Text;
 
 public class Message
 {
+    private const int START_LEN = 2;
+    private const int END_LEN = 2;
+    private const int LEN_LEN = 4;
+    private const int CMD_LEN = 4;
+ 
+
     #region 字段
     private eCmd m_cmd = 0;
     private int m_len = 0;
@@ -43,7 +49,7 @@ public class Message
         }
     }
 
-    //只是内容
+    // 内容 包括头尾 长度 消息头 具体内容
     public byte[] Content
     {
         get
@@ -53,157 +59,25 @@ public class Message
         set
         {
             m_innerContent = value.ToList();
-            m_position = 0;
+            //m_position = 0;
         }
     }
     #endregion
 
-    #region 公有方法
-    public void AddInt(int param)
+    // 构建一个空
+    public Message()
     {
-        var bytes = BitConverter.GetBytes(param);
-
-        m_innerContent.AddRange(bytes);
     }
 
-    public void AddLong(long param)
+    // 构建一个发送包
+    public Message(eCmd _cmd)
     {
-        var bytes = BitConverter.GetBytes(param);
-
-        m_innerContent.AddRange(bytes);
+        m_cmd = _cmd;
+        m_len = LEN_LEN + CMD_LEN;         // START_LEN, END_LEN
     }
-
-    public void AddFloat(float param)
-    {
-        var bytes = BitConverter.GetBytes(param);
-
-        m_innerContent.AddRange(bytes);
-    }
-
-    public void AddShort(short param)
-    {
-        var bytes = BitConverter.GetBytes(param);
-
-        m_innerContent.AddRange(bytes);
-    }
-
-    public void AddChar(char param)
-    {
-        var bytes = BitConverter.GetBytes(param);
-
-        m_innerContent.AddRange(bytes);
-    }
-
-    public void AddString(string param)
-    {
-        var len = Convert.ToInt16(param.Length);
-
-        var strLenBytes = BitConverter.GetBytes(len);
-
-        var bytes = Encoding.ASCII.GetBytes(param);
-
-        m_innerContent.AddRange(strLenBytes);
-        m_innerContent.AddRange(bytes);
-    }
-
-    public void AddBool(bool param)
-    {
-        var bytes = BitConverter.GetBytes(param);
-        m_innerContent.AddRange(bytes);
-    }
-
-    public int GetInt()
-    {
-        var intLen = sizeof(int);
-
-        var bytes = m_innerContent.GetRange(m_position, intLen).ToArray();
-
-        m_position += intLen;
-
-        return BitConverter.ToInt32(bytes, bytes.Length);
-    }
-
-    public long GetLong()
-    {
-        var longLen = sizeof(long);
-
-        var bytes = m_innerContent.GetRange(m_position, longLen).ToArray();
-
-        m_position += longLen;
-
-        return BitConverter.ToInt64(bytes, bytes.Length);
-    }
-
-    public float GetFloat()
-    {
-        var floatLen = sizeof(float);
-
-        var bytes = m_innerContent.GetRange(m_position, floatLen).ToArray();
-
-        m_position += floatLen;
-
-        return BitConverter.ToSingle(bytes, bytes.Length);
-    }
-
-    public short GetShort()
-    {
-        var shortLen = sizeof(short);
-
-        var bytes = m_innerContent.GetRange(m_position, shortLen).ToArray();
-
-        m_position += shortLen;
-
-        return BitConverter.ToInt16(bytes, bytes.Length);
-    }
-
-    public char GetChar()
-    {
-        var charLen = sizeof(char);
-
-        var bytes = m_innerContent.GetRange(m_position, charLen).ToArray();
-
-        m_position += charLen;
-
-        return BitConverter.ToChar(bytes, bytes.Length);
-    }
-
-    public string GetString()
-    {
-        //先获取长度
-        var strLenBytes = m_innerContent.GetRange(m_position, sizeof(Int16)).ToArray();
-
-        m_position += sizeof(Int16);
-
-        var strLen = BitConverter.ToInt16(strLenBytes, strLenBytes.Length);
-
-        //获取字符串
-        var stringBytes = m_innerContent.GetRange(m_position, strLen).ToArray();
-
-        m_position += strLen;
-
-        return Encoding.ASCII.GetString(stringBytes);
-    }
-
-    public bool GetBool()
-    {
-        var boolLen = sizeof(bool);
-
-        var bytes = m_innerContent.GetRange(m_position, boolLen).ToArray();
-
-        m_position += boolLen;
-
-        return BitConverter.ToBoolean(bytes, bytes.Length);
-    }
-
-
-    public void Send()
-    {
-        Debug.Log("Msg.Send, cmd:" + (int)this.m_cmd);
-        MsgQunue.Instance.AddSendMsg(this);
-    }
-
+    #region 私有方法
     //打包
-    public byte[] Package()
+    public byte[] Encode()
     {
 
         var lenBytes = GetMessageLenBytes();
@@ -220,81 +94,86 @@ public class Message
         return tempList.ToArray();
     }
 
-    public bool UnPackage(byte[] bytes)
+    public bool Decode(byte[] bytes)
     {
-        //长度不对解包失败
-        if (bytes.Length - 4 > 640)
-        {
-            return false;
-        }
+        m_position = 0;
+        Debug.Log("UnPackage 1:" + bytes.Length);
 
-        //头不对失败
+        // 验证头部
         if (!CheckHead(bytes))
         {
             return false;
         }
+        m_position += START_LEN;
 
-        m_len = GetMessageLen(bytes);
+        // 获取长度
+        Debug.Log("UnPackage 2");
+        Len = DecodeLen(bytes);
+        m_position += LEN_LEN;
+        
+        // 验证尾部
+        Debug.Log("UnPackage 3, m_len:" + Len);
+        if (!CheckEnd(bytes))
+        {
+            return false;
+        }
 
-        m_cmd = GetCmd(bytes);
+        Debug.Log("UnPackage 4");
+        m_cmd = DecodeCmd(bytes);
+        m_position += CMD_LEN;
 
+        Debug.Log("UnPackage 5, cmd:" + (int)Cmd);
         Content = GetContent(bytes);
 
         return true;
     }
-    #endregion
 
-    #region 私有方法
-    private int GetMessageLen(byte[] bytes)
+    public void Send()
     {
-        byte[] lenBytes = new byte[4];
+        Debug.Log("Msg.Send, cmd:" + (int)this.m_cmd);
+        MsgQunue.Instance.AddSendMsg(this);
+    }
+  
+    private int DecodeLen(byte[] bytes)
+    {
+        byte[] lenBytes = new byte[LEN_LEN];
 
-        bytes.ToList().CopyTo(2, lenBytes, 0, 4);
+        bytes.ToList().CopyTo(m_position, lenBytes, 0, LEN_LEN);
 
-        return BitConverter.ToInt32(lenBytes, lenBytes.Length);
+        int  ret = BitConverter.ToInt32(lenBytes, 0);
+        return ret;
     }
 
-    private eCmd GetCmd(byte[] bytes)
+    private eCmd DecodeCmd(byte[] bytes)
     {
-        byte[] cmdBytes = new byte[4];
+        byte[] cmdBytes = new byte[CMD_LEN];
 
-        bytes.ToList().CopyTo(6, cmdBytes, 0, 4);
-
-        var value = BitConverter.ToInt32(cmdBytes, cmdBytes.Length);
+        bytes.ToList().CopyTo(m_position, cmdBytes, 0, CMD_LEN);
+        var value = BitConverter.ToInt32(cmdBytes, 0);
 
         return (eCmd)value;
     }
 
     private byte[] GetContent(byte[] bytes)
     {
-        var contentLen = bytes.Length - 2 - 4 - 4 - 2;
+        //Debug.Log("m_len:" + m_len);
+        //var contentLen = m_len + START_LEN + END_LEN;// bytes.Length - 2 - 4 - 4 - 2;
 
-        byte[] contentBytes = new byte[contentLen];
+        //byte[] contentBytes = new byte[contentLen];
 
-        bytes.ToList().CopyTo(10, contentBytes, 0, contentBytes.Length);
+        //bytes.ToList().CopyTo(0, contentBytes, 0, contentBytes.Length);
 
-        return contentBytes;
-    }
+        //return contentBytes;
 
-    public bool Check()
-    {
-        //减去头和尾共4字节
-        if (Package().Length - 4 > 640)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return bytes;
     }
 
     private byte[] GetMessageLenBytes()
     {
         //计算长度
-        var len = Convert.ToInt32(4 + 4 + Content.Length);
-
-        var realLenBytes = BitConverter.GetBytes(len);
+        //var len = Convert.ToInt32(4 + 4 + Content.Length);
+        Debug.Log("GetMessageLenBytes, m_len:" + m_len);
+        var realLenBytes = BitConverter.GetBytes(m_len);
 
         return realLenBytes;
     }
@@ -313,16 +192,177 @@ public class Message
     {
         for (int i = 0; i < 2; i++)
         {
-            if (bytes[i] != 0x02)
+            if (bytes[i] != this.m_StartFlag[i])
             {
+                Debug.Log("CheckHead, ret false");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool CheckEnd(byte[] bytes)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            int index = START_LEN + m_len + i;
+            Debug.Log("CheckEnd index:" + index + " m_len:" + m_len);
+            if (bytes[index] != this.m_EndFlag[i])
+            {
+                Debug.Log("CheckEnd, ret false");
                 return false;
             }
         }
 
         return true;
     }
+
     #endregion
 
+    #region 公有方法
+    public void AddInt(int param)
+    {
+        var bytes = BitConverter.GetBytes(param);
+        
+        m_innerContent.AddRange(bytes);
+        m_len += bytes.Length;
+    }
 
+    public void AddLong(long param)
+    {
+        var bytes = BitConverter.GetBytes(param);
+
+        m_innerContent.AddRange(bytes);
+        m_len += bytes.Length;
+    }
+
+    public void AddFloat(float param)
+    {
+        var bytes = BitConverter.GetBytes(param);
+
+        m_innerContent.AddRange(bytes);
+        m_len += bytes.Length;
+    }
+
+    public void AddShort(short param)
+    {
+        var bytes = BitConverter.GetBytes(param);
+
+        m_innerContent.AddRange(bytes);
+        m_len += bytes.Length;
+    }
+
+    public void AddChar(char param)
+    {
+        var bytes = BitConverter.GetBytes(param);
+
+        m_innerContent.AddRange(bytes);
+        m_len += bytes.Length;
+    }
+
+    public void AddString(string param)
+    {
+        var len = Convert.ToInt16(param.Length);
+
+        var strLenBytes = BitConverter.GetBytes(len);
+
+        var bytes = Encoding.ASCII.GetBytes(param);
+
+        m_innerContent.AddRange(strLenBytes);
+        m_innerContent.AddRange(bytes);
+        m_len += len;
+        m_len += bytes.Length;
+    }
+
+    public void AddBool(bool param)
+    {
+        var bytes = BitConverter.GetBytes(param);
+        m_innerContent.AddRange(bytes);
+        m_len += bytes.Length;
+    }
+
+    public int GetInt()
+    {
+        var intLen = sizeof(int);
+        var bytes = m_innerContent.GetRange(m_position, intLen).ToArray();
+        m_position += intLen;
+
+        return BitConverter.ToInt32(bytes, 0);
+    }
+
+    public long GetLong()
+    {
+        var longLen = sizeof(long);
+
+        var bytes = m_innerContent.GetRange(m_position, longLen).ToArray();
+
+        m_position += longLen;
+
+        return BitConverter.ToInt64(bytes, 0);
+    }
+
+    public float GetFloat()
+    {
+        var floatLen = sizeof(float);
+
+        var bytes = m_innerContent.GetRange(m_position, floatLen).ToArray();
+
+        m_position += floatLen;
+
+        return BitConverter.ToSingle(bytes, 0);
+    }
+
+    public short GetShort()
+    {
+        var shortLen = sizeof(short);
+
+        var bytes = m_innerContent.GetRange(m_position, shortLen).ToArray();
+
+        m_position += shortLen;
+
+        return BitConverter.ToInt16(bytes, 0);
+    }
+
+    public char GetChar()
+    {
+        var charLen = sizeof(char);
+
+        var bytes = m_innerContent.GetRange(m_position, charLen).ToArray();
+
+        m_position += charLen;
+
+        return BitConverter.ToChar(bytes, 0);
+    }
+
+    public string GetString()
+    {
+        //先获取长度
+        var strLenBytes = m_innerContent.GetRange(m_position, sizeof(Int16)).ToArray();
+
+        m_position += sizeof(Int16);
+
+        var strLen = BitConverter.ToInt16(strLenBytes, 0);
+
+        //获取字符串
+        var stringBytes = m_innerContent.GetRange(m_position, strLen).ToArray();
+
+        m_position += strLen;
+
+        return Encoding.ASCII.GetString(stringBytes);
+    }
+
+    public bool GetBool()
+    {
+        var boolLen = sizeof(bool);
+
+        var bytes = m_innerContent.GetRange(m_position, boolLen).ToArray();
+
+        m_position += boolLen;
+
+        return BitConverter.ToBoolean(bytes, 0);
+    }
+
+
+    #endregion
 
 }
