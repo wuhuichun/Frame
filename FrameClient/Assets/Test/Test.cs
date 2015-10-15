@@ -17,7 +17,7 @@ public class Test : MonoBehaviour {
     public void TestFun1()
     {
         //Debug.Log("TestFun1()");
-        Game.Instance.Init();
+        //Game.Instance.Init();
         //byte[] b4 = new byte[] { 0x0C, 0x00, 0x00, 0x00 };
         //int a = BitConverter.ToInt32(b4, 0);
 

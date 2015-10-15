@@ -17,11 +17,15 @@ public class Game{
     // 游戏初始化
     public void Init()
     {
+        m_isInit = true;
+
+    }
+
+    public void InitNet()
+    {
         // 网络初始化
         this.GetNet().InitNetWork();
 
-
-        m_isInit = true;
     }
 
     // 游戏主循环
