@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+
 
 public class UpdateResUI : MonoBehaviour {
 
@@ -32,8 +34,24 @@ public class UpdateResUI : MonoBehaviour {
 
     public IEnumerator LoadConfig()
     {
-        ConfigMgr.Instance.Load();
+         ConfigMgr.Instance.LoadAll();
         yield return 0;
     }
+
+    //public IEnumerator LoadConfigFile(string _file, Action<string> _action)
+    //{
+
+    //    WWW www = new WWW(_file);
+    //    yield return www;
+
+    //    if (!string.IsNullOrEmpty(www.error))
+    //    {
+    //        Log.Error(www.error);
+    //        yield break;
+    //    }
+
+    //    string jsonText = www.text;
+    //    _action(jsonText);
+    //}
 
 }

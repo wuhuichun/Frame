@@ -1,8 +1,7 @@
-
 // Define From City.xlsx
-public struct City
+public struct CityCfg
 {
-	public string ID; // 编号
+	public int ID; // 编号
 	public string Name; // 名称
 	public int CountryID; // 所属势力
 	public int StateID; // 所属州
@@ -23,9 +22,9 @@ public struct City
 
 
 // Define From Contry.xlsx
-public struct Contry
+public struct ContryCfg
 {
-	public string ID; // 编号
+	public int ID; // 编号
 	public string Name; // 名称
 	public int Color; // 代表色
 	public string Font; // 代表字
@@ -36,11 +35,12 @@ public struct Contry
 
 
 // Define From State.xlsx
-public struct State
+public struct StateCfg
 {
-	public string ID; // 编号
+	public int ID; // 编号
 	public string Name; // 名称
 	public string Capital; // 首府
 	public string Desc; // 描述
 }
+
 
