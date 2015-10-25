@@ -50,6 +50,7 @@
      <Compile Include="Assets\Script\Common\Log.cs" />
      <Compile Include="Assets\Script\Config\ConfigDef.cs" />
      <Compile Include="Assets\Script\Config\ConfigMgr.cs" />
+     <Compile Include="Assets\Script\Config\MyConfigDef.cs" />
      <Compile Include="Assets\Script\Frame\Game.cs" />
      <Compile Include="Assets\Script\Frame\GameDriver.cs" />
      <Compile Include="Assets\Script\Frame\LitJson\IJsonWrapper.cs" />
@@ -70,15 +71,24 @@
      <Compile Include="Assets\Script\Login\Login.cs" />
      <Compile Include="Assets\Script\Login\LoginUI.cs" />
      <Compile Include="Assets\Script\System\CitySys\CitySys.cs" />
+     <Compile Include="Assets\Script\System\Create\AnswerUnit.cs" />
      <Compile Include="Assets\Script\System\Create\CreateSys.cs" />
+     <Compile Include="Assets\Script\System\Create\CreateUI.cs" />
      <Compile Include="Assets\Script\System\Create\QustionUI.cs" />
+     <Compile Include="Assets\Script\System\Create\QustionUnit.cs" />
      <Compile Include="Assets\Script\System\TestFunc\TestFuncUI.cs" />
      <Compile Include="Assets\Test\Test.cs" />
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>D:/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>

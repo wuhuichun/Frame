@@ -11,31 +11,37 @@ public class ConfigMgr{
     public static ConfigMgr Instance = new ConfigMgr();
 
     private string m_path;                                          // 配置文件路径 
+    private bool m_isLoad = false;
 
-    private List<CityCfg> m_CityCfg_lst;                            // 城市
-    private List<StateCfg> m_StateCfg_lst;                          // 州
-    private List<ContryCfg> m_ContryCfg_lst;                        // 势力
+    public static List<CityCfg> m_CityCfg_lst = new List<CityCfg>();                            // 城市
+    public static List<StateCfg> m_StateCfg_lst= new List<StateCfg>();                          // 州
+    public static List<ContryCfg> m_ContryCfg_lst = new List<ContryCfg>();                       // 势力
+    public static List<QuestionCfg> m_QuestionCfg_lst = new List<QuestionCfg>();                // 问题
 
     // 初始化
     private void Init()
     {
-        m_path = Application.streamingAssetsPath + "/Config/Json/";
-
-        m_CityCfg_lst = new List<CityCfg>();
-        m_StateCfg_lst = new List<StateCfg>();
-        m_ContryCfg_lst = new List<ContryCfg>();
+        m_path = Application.streamingAssetsPath + "/Config/CJson/";
     }
 
     // 加载所有配置
     public void LoadAll()
-    { 
+    {
+        if (m_isLoad)
+        {
+            return;
+        }
+
+
         Init();
 
         LoadCfg<CityCfg>("City", m_CityCfg_lst);
         LoadCfg<StateCfg>("State", m_StateCfg_lst);
-        LoadCfg<ContryCfg>("State", m_ContryCfg_lst);
+        LoadCfg<ContryCfg>("Contry", m_ContryCfg_lst);
+        LoadCfg<QuestionCfg>("Question", m_QuestionCfg_lst);
 
         Log.Info("ConfigMgr.Load() Finished");
+        m_isLoad = true;
     }
 
     // 加载配置, 存到List;
@@ -123,5 +129,18 @@ public class ConfigMgr{
 
         Log.Error("配置缺失, _key:" + _key + " /Dictionary:" + _Dic.ToString());
         return default(T);
+    }
+
+    public QuestionCfg GetQuestionCfg(int id)
+    {
+        for (int i = 0; i < m_QuestionCfg_lst.Count; i++)
+        {
+            if (m_QuestionCfg_lst[i].ID == id)
+            {
+                return m_QuestionCfg_lst[i];
+            }
+        }
+
+        return null;
     }
 }

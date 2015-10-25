@@ -1,0 +1,209 @@
+[
+  {
+    "ID": 1,
+    "Name": "势力1",
+    "Color": 1,
+    "Font": "曹操",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力, "
+  },
+  {
+    "ID": 2,
+    "Name": "势力2",
+    "Color": 2,
+    "Font": "公孙度",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 3,
+    "Name": "势力3",
+    "Color": 3,
+    "Font": "公孙瓒",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 4,
+    "Name": "势力4",
+    "Color": 4,
+    "Font": "袁绍",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 5,
+    "Name": "势力5",
+    "Color": 5,
+    "Font": "韩馥",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 6,
+    "Name": "势力6",
+    "Color": 6,
+    "Font": "张扬",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 7,
+    "Name": "势力7",
+    "Color": 7,
+    "Font": "鲍信",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 8,
+    "Name": "势力8",
+    "Color": 8,
+    "Font": "孔融",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 9,
+    "Name": "势力9",
+    "Color": 9,
+    "Font": "王匡",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 10,
+    "Name": "势力10",
+    "Color": 10,
+    "Font": "刘岱",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": "我只是一个小势力"
+  },
+  {
+    "ID": 11,
+    "Name": "势力11",
+    "Color": 11,
+    "Font": "袁遗",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 12,
+    "Name": "势力12",
+    "Color": 12,
+    "Font": "桥瑁",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 13,
+    "Name": "势力13",
+    "Color": 13,
+    "Font": "陶谦",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 14,
+    "Name": "势力14",
+    "Color": 14,
+    "Font": "张邈",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 15,
+    "Name": "势力15",
+    "Color": 15,
+    "Font": "孔伷",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 16,
+    "Name": "势力16",
+    "Color": 16,
+    "Font": "张超",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 17,
+    "Name": "势力17",
+    "Color": 17,
+    "Font": "袁术",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 18,
+    "Name": "势力18",
+    "Color": 18,
+    "Font": "刘表",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 19,
+    "Name": "势力19",
+    "Color": 19,
+    "Font": "孙坚",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 20,
+    "Name": "势力20",
+    "Color": 20,
+    "Font": "刘焉",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 21,
+    "Name": "势力21",
+    "Color": 21,
+    "Font": "马腾",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 22,
+    "Name": "势力22",
+    "Color": 22,
+    "Font": "董卓",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  },
+  {
+    "ID": 23,
+    "Name": "势力23",
+    "Color": 23,
+    "Font": "刘备",
+    "Leader": 1,
+    "Flag": 1,
+    "Desc": ""
+  }
+]
