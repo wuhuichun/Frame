@@ -31,7 +31,7 @@ public class CreateSys{
     {
         if (_index >= m_questionId_lst.Count)
         {
-            Log.Error("_index >= m_questionId_lst.Count");
+            //Log.Error("_index >= m_questionId_lst.Count");
             return null;
         }
 

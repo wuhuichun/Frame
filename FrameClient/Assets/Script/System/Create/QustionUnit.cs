@@ -188,9 +188,7 @@ public class QustionUnit : MonoBehaviour {
             return m_AnswerUnit_lst[_index];
         }
 
-        GameObject go = Common.CreateGO(TfAnsowerPos, "AnswerUnit");
-        AnswerUnit script = go.AddComponent<AnswerUnit>();
-
+        AnswerUnit script = Common.Create<AnswerUnit>(TfAnsowerPos);
         m_AnswerUnit_lst.Add(script);
 
         return script;

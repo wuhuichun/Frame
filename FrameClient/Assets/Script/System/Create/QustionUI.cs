@@ -7,10 +7,10 @@ public class QustionUI : MonoBehaviour {
     private Transform TfNodePos;
     private Button BtnNext;
     private Button BtnBack;
-
+    private CreateRoleUI UICreateRole;
 
     private int m_stepIndex = 1;        // 当前步数
-    private int m_stepMax = 4;          // 最大步数
+    private int m_stepMax = 5;          // 最大步数
     private List<QustionUnit> m_QuestionUnit_lst = new List<QustionUnit>();
 
     void Awake()
@@ -18,6 +18,8 @@ public class QustionUI : MonoBehaviour {
         TfNodePos = transform.FindChild("NodePos").transform;
         BtnNext = transform.FindChild("BtnNext").GetComponent<Button>();
         BtnBack = transform.FindChild("BtnBack").GetComponent<Button>();
+        UICreateRole = TfNodePos.FindChild("CreateRoleUI").GetComponent<CreateRoleUI>();
+        UICreateRole.gameObject.SetActive(false);
     }
     
 	// Use this for initialization
@@ -44,16 +46,26 @@ public class QustionUI : MonoBehaviour {
     private void OnBtnNextClick()
     {
         Debug.Log("OnBtnNextClick, m_stepIndex:" + m_stepIndex);
-        m_stepIndex++;
-        if (m_stepIndex > m_stepMax)
+
+        if (m_stepIndex < m_stepMax+1)
+        { 
+            m_stepIndex++;
+        }
+
+        if (m_stepIndex == m_stepMax)
         {
             // 创建列表
-            Debug.Log("创建列表" + m_stepIndex);
+            Debug.Log("角色列表" + m_stepIndex);
             ChangeToRoleList();
 
             return;
         }
 
+
+        if (m_stepIndex > m_stepMax)
+        {
+            Debug.Log("创建...");
+        }
         // 切换到下一步代码:
         UpdateUI();
     }
@@ -68,6 +80,11 @@ public class QustionUI : MonoBehaviour {
             return;
         }
 
+        if (m_stepIndex == m_stepMax)
+        {
+            ChangeToQuestionList();
+        }
+
         // 切换到上一步代码:
         UpdateUI();
     }
@@ -80,9 +97,7 @@ public class QustionUI : MonoBehaviour {
             return m_QuestionUnit_lst[_index];
         }
 
-        GameObject go = Common.CreateGO(TfNodePos, "QustionUnit");
-        QustionUnit script = go.AddComponent<QustionUnit>();
-
+        QustionUnit script = Common.Create<QustionUnit>(TfNodePos);
         m_QuestionUnit_lst.Add(script);
 
         return script;
@@ -95,6 +110,16 @@ public class QustionUI : MonoBehaviour {
         script.gameObject.SetActive(false);
 
         // 显示角色列表
+        this.UICreateRole.gameObject.SetActive(true);
+    }
 
+    private void ChangeToQuestionList()
+    {
+        // 显示问题UI;
+        QustionUnit script = GetQustionUnit(0);
+        script.gameObject.SetActive(true);
+
+        // 隐藏角色列表
+        this.UICreateRole.gameObject.SetActive(false);
     }
 }
