@@ -18,8 +18,7 @@ public class QustionUI : MonoBehaviour {
         TfNodePos = transform.FindChild("NodePos").transform;
         BtnNext = transform.FindChild("BtnNext").GetComponent<Button>();
         BtnBack = transform.FindChild("BtnBack").GetComponent<Button>();
-        UICreateRole = TfNodePos.FindChild("CreateRoleUI").GetComponent<CreateRoleUI>();
-        UICreateRole.gameObject.SetActive(false);
+
     }
     
 	// Use this for initialization
@@ -110,6 +109,7 @@ public class QustionUI : MonoBehaviour {
         script.gameObject.SetActive(false);
 
         // 显示角色列表
+        this.UICreateRole = this.GetCreateRoleUI();
         this.UICreateRole.gameObject.SetActive(true);
     }
 
@@ -120,6 +120,17 @@ public class QustionUI : MonoBehaviour {
         script.gameObject.SetActive(true);
 
         // 隐藏角色列表
+        this.UICreateRole = this.GetCreateRoleUI();
         this.UICreateRole.gameObject.SetActive(false);
+    }
+
+    private CreateRoleUI GetCreateRoleUI()
+    {
+        if (this.UICreateRole == null)
+        {
+            this.UICreateRole = Common.Create<CreateRoleUI>(this.TfNodePos);
+        }
+
+        return this.UICreateRole;
     }
 }

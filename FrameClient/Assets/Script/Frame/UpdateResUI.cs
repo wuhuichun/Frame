@@ -29,6 +29,7 @@ public class UpdateResUI : MonoBehaviour {
 
         yield return StartCoroutine(LoadConfig());
 
+        Game.Instance.Init();
         Application.LoadLevel("Login");
     }
 

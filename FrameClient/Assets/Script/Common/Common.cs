@@ -19,6 +19,7 @@ public class Common : MonoBehaviour {
     public static T Create<T>(Transform _TfParent) where T:Component
     {
         string scriptName = typeof(T).Name.Trim();
+        //Debug.Log("scriptName:" + scriptName);
         GameObject go = CreateGO(_TfParent, scriptName);
         T script = go.AddComponent<T>();
 

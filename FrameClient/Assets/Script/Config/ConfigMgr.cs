@@ -13,10 +13,11 @@ public class ConfigMgr{
     private string m_path;                                          // 配置文件路径 
     private bool m_isLoad = false;
 
-    public static List<CityCfg> m_CityCfg_lst = new List<CityCfg>();                            // 城市
-    public static List<StateCfg> m_StateCfg_lst= new List<StateCfg>();                          // 州
-    public static List<ContryCfg> m_ContryCfg_lst = new List<ContryCfg>();                       // 势力
-    public static List<QuestionCfg> m_QuestionCfg_lst = new List<QuestionCfg>();                // 问题
+    public static List<CityCfg> CityCfg_lst = new List<CityCfg>();                            // 城市
+    public static List<StateCfg> StateCfg_lst= new List<StateCfg>();                          // 州
+    public static List<ContryCfg> ContryCfg_lst = new List<ContryCfg>();                       // 势力
+    public static List<QuestionCfg> QuestionCfg_lst = new List<QuestionCfg>();                // 问题
+    public static List<RoleCfg> RoleCfg_lst = new List<RoleCfg>();
 
     // 初始化
     private void Init()
@@ -35,10 +36,11 @@ public class ConfigMgr{
 
         Init();
 
-        LoadCfg<CityCfg>("City", m_CityCfg_lst);
-        LoadCfg<StateCfg>("State", m_StateCfg_lst);
-        LoadCfg<ContryCfg>("Contry", m_ContryCfg_lst);
-        LoadCfg<QuestionCfg>("Question", m_QuestionCfg_lst);
+        LoadCfg<CityCfg>("City", CityCfg_lst);
+        LoadCfg<StateCfg>("State", StateCfg_lst);
+        LoadCfg<ContryCfg>("Contry", ContryCfg_lst);
+        LoadCfg<QuestionCfg>("Question", QuestionCfg_lst);
+        LoadCfg<RoleCfg>("Role", RoleCfg_lst);
 
         Log.Info("ConfigMgr.Load() Finished");
         m_isLoad = true;
@@ -133,14 +135,15 @@ public class ConfigMgr{
 
     public QuestionCfg GetQuestionCfg(int id)
     {
-        for (int i = 0; i < m_QuestionCfg_lst.Count; i++)
+        for (int i = 0; i < QuestionCfg_lst.Count; i++)
         {
-            if (m_QuestionCfg_lst[i].ID == id)
+            if (QuestionCfg_lst[i].ID == id)
             {
-                return m_QuestionCfg_lst[i];
+                return QuestionCfg_lst[i];
             }
         }
 
         return null;
     }
+
 }

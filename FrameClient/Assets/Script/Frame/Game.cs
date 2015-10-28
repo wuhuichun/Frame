@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 
 public class Game{
@@ -14,10 +15,19 @@ public class Game{
 
     private Net m_Net;
 
+    System.Random m_Rand;
+
+    public System.Random Rand
+    {
+        get { return m_Rand; }
+    }
+
     // 游戏初始化
     public void Init()
     {
         m_isInit = true;
+        m_Rand = new System.Random((int)DateTime.Now.Millisecond);
+        
 
     }
 
